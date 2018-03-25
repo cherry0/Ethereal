@@ -1,6 +1,8 @@
 package cherry.ethereal;
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import cherry.ethereal.broadcast.VolumeReceiver;
 import me.wcy.lrcview.LrcView;
 
 /**
@@ -36,6 +40,9 @@ public class LrcFragment extends android.support.v4.app.Fragment {
     private Button btnLrcBack;
     private OnFragmentInteractionListener mListener;
     private LrcView lrcView;
+    private SeekBar mvolumeSeekBar;
+    private AudioManager am;
+    private VolumeReceiver volumeReceiver;
     public LrcFragment() {
         // Required empty public constructor
     }
@@ -124,10 +131,11 @@ public class LrcFragment extends android.support.v4.app.Fragment {
         lrcView.setOnPlayClickListener(new LrcView.OnPlayClickListener() {
             @Override
             public boolean onPlayClick(long time) {
+
                 return true;
             }
         });
-
+        mvolumeSeekBar=(SeekBar)view.findViewById(R.id.volumeSeekBar);
         btnLrcBack=(Button)view.findViewById(R.id.btnLrcBack);
         btnLrcBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +143,9 @@ public class LrcFragment extends android.support.v4.app.Fragment {
                 Toast.makeText(getContext(), "打开歌词", Toast.LENGTH_SHORT).show();
             }
         });
-
+        setVolume();
     }
+
     public String getLrcText(String fileName){
         String lrcText = null;
         try {
@@ -150,5 +159,45 @@ public class LrcFragment extends android.support.v4.app.Fragment {
             e.printStackTrace();
         }
         return lrcText;
+    }
+
+    public void setVolume()
+    {
+        am=(AudioManager)getActivity().getSystemService(Context.AUDIO_SERVICE);
+        //获取系统最大音量
+        int maxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        mvolumeSeekBar.setMax(maxVolume);
+        //获取当前音量
+        int currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mvolumeSeekBar.setProgress(currentVolume);
+        mvolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser){
+                    //设置系统音量
+                    am.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                    int currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    seekBar.setProgress(currentVolume);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        volumeReceiver = new VolumeReceiver(am,mvolumeSeekBar);
+        IntentFilter filter = new IntentFilter() ;
+        filter.addAction("android.media.VOLUME_CHANGED_ACTION") ;
+        getActivity().registerReceiver(volumeReceiver, filter) ;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(volumeReceiver);
     }
 }

@@ -9,8 +9,10 @@
     <me.wcy.lrcview.LrcView
         android:id="@+id/lrc_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="563dp"
+        android:layout_marginTop="48dp"
         android:layout_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
         app:lrcAnimationDuration="1000"
         app:lrcCurrentTextColor="#3F51B5"
         app:lrcDividerHeight="24dp"
@@ -20,7 +22,8 @@
         app:lrcTextSize="16sp"
         app:lrcTimeTextColor="#BDBDBD"
         app:lrcTimelineColor="#80BDBDBD"
-        app:lrcTimelineTextColor="#9FA8DA" />
+        app:lrcTimelineTextColor="#9FA8DA"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/btnLrcBack"
@@ -31,4 +34,17 @@
         android:text="我是歌词"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/volumeSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/lrc_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

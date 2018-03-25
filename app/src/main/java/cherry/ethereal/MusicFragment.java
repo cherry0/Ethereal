@@ -1,10 +1,12 @@
 package cherry.ethereal;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -34,7 +36,7 @@ import static cherry.ethereal.CustomRender.rsBlur;
  * Use the {@link MusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MusicFragment extends Fragment {
+public class MusicFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,7 +54,8 @@ public class MusicFragment extends Fragment {
     private TextView mnextBtn;
     private TextView mlistBtn;
     private TextView mplayOptionBtn;
-
+    private android.app.FragmentManager fragmentManager;
+    private MusicListFragment musicListFragment;
     public MusicFragment() {
         // Required empty public constructor
     }
@@ -115,6 +118,14 @@ public class MusicFragment extends Fragment {
         mListener = null;
     }
 
+
+
+//    @Override
+//    public void showOrHideWindow() {
+//        Toast.makeText(getContext(),"111",Toast.LENGTH_SHORT).show();
+//    }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -138,12 +149,10 @@ public class MusicFragment extends Fragment {
     private void init(View view) {
         mviewPager = (ViewPager) view.findViewById(R.id.music_view_page);
         pageList = new ArrayList<View>();
-//        LayoutInflater li =getActivity().getLayoutInflater();
-//        pageList.add(li.inflate(R.layout.music_cover_page, null, false));
-//        pageList.add(li.inflate(R.layout.music_lrc_page, null, false));
         //动态加载viewPage
         android.support.v4.app.Fragment lrcFragment = new LrcFragment();
         android.support.v4.app.Fragment coverFragment = new CoverFragment();
+
         List<android.support.v4.app.Fragment> fr_list = new ArrayList<android.support.v4.app.Fragment>();
         //组织数据源
         fr_list.add(coverFragment);
@@ -178,6 +187,10 @@ public class MusicFragment extends Fragment {
         mpreviousBtn.setTypeface(iconfont);
         mlistBtn.setTypeface(iconfont);
         mplayOptionBtn.setTypeface(iconfont);
+
+        fragmentManager = getChildFragmentManager();
+        musicListFragment = ((MusicListFragment) fragmentManager.findFragmentById(R.id.music_list_fragment));
+
     }
 
     /**
@@ -223,6 +236,7 @@ public class MusicFragment extends Fragment {
         mlistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                musicListFragment.showOrHideWindow();
                 Toast.makeText(getContext(), "点击目录列表", Toast.LENGTH_SHORT).show();
             }
         });
