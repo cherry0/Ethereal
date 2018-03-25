@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Ethereal</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="icons_play">&#xe87c;</string>
+    <string name="icons_pause">&#xe87a;</string>
+    <string name="icons_previous">&#xe6e1;</string>
+    <string name="icons_next">&#xe718;</string>
+    <string name="icons_list">&#xe890;</string>
+    <string name="icons_once_loop_play">&#xe66d;</string>
+    <string name="icons_list_loop_play">&#xe609;</string>
+    <string name="icons_random_play">&#xe622;</string>
+    <string name="icons_voice">&#xe87b;</string>
+</resources>
