@@ -28,6 +28,8 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.util.Util;
 import cherry.ethereal.data.ColorWrapper;
 import cherry.ethereal.R;
+import cherry.ethereal.data.MusicUnit.MusicSuggestion;
+import cherry.ethereal.data.MusicUnit.SearchProposal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +37,12 @@ import java.util.List;
 
 public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResultsListAdapter.ViewHolder> {
 
-    private List<ColorWrapper> mDataSet = new ArrayList<>();
+    private List<SearchProposal.Content.Songs> mDataSet = new ArrayList<>();
 
     private int mLastAnimatedItemPosition = -1;
 
     public interface OnItemClickListener{
-        void onClick(ColorWrapper colorWrapper);
+        void onClick(SearchProposal.Content.Songs colorWrapper);
     }
 
     private OnItemClickListener mItemsOnClickListener;
@@ -58,7 +60,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         }
     }
 
-    public void swapData(List<ColorWrapper> mNewDataSet) {
+    public void swapData(List<SearchProposal.Content.Songs> mNewDataSet) {
         mDataSet = mNewDataSet;
         notifyDataSetChanged();
     }
@@ -77,13 +79,13 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     @Override
     public void onBindViewHolder(SearchResultsListAdapter.ViewHolder holder, final int position) {
 
-        ColorWrapper colorSuggestion = mDataSet.get(position);
-        holder.mColorName.setText(colorSuggestion.getName());
-        holder.mColorValue.setText(colorSuggestion.getHex());
+        SearchProposal.Content.Songs colorSuggestion = mDataSet.get(position);
+//        holder.mColorName.setText(colorSuggestion.id());
+//        holder.mColorValue.setText(colorSuggestion.name());
 
-        int color = Color.parseColor(colorSuggestion.getHex());
-        holder.mColorName.setTextColor(color);
-        holder.mColorValue.setTextColor(color);
+//        int color = Color.parseColor(colorSuggestion.getHex());
+//        holder.mColorName.setTextColor(color);
+//        holder.mColorValue.setTextColor(color);
 
         if(mLastAnimatedItemPosition < position){
             animateItem(holder.itemView);

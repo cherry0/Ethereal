@@ -144,7 +144,7 @@ public class MainFragment extends Fragment {
         setupFloatingSearch();
         setupResultsList();
 
-        getSeachResource();
+//        getSeachResource();
     }
 
     /**
@@ -205,6 +205,18 @@ public class MainFragment extends Fragment {
             @Override
             public void onSuggestionClicked(final SearchSuggestion searchSuggestion) {
 
+                MusicSuggestion colorSuggestion = (MusicSuggestion) searchSuggestion;
+                MusicDataHelper.findColors(getActivity(), colorSuggestion.getBody(),
+                        new MusicDataHelper.OnFindColorsListener() {
+
+                            @Override
+                            public void onResults(List<SearchProposal.Content.Songs> results) {
+                                mSearchResultsAdapter.swapData(results);
+                            }
+
+                        });
+                Log.d(TAG, "onSuggestionClicked()");
+
                 mLastQuery = searchSuggestion.getBody();
             }
 
@@ -212,6 +224,15 @@ public class MainFragment extends Fragment {
             public void onSearchAction(String query) {
                 mLastQuery = query;
 
+                MusicDataHelper.findColors(getActivity(), query,
+                        new MusicDataHelper.OnFindColorsListener() {
+
+                            @Override
+                            public void onResults(List<SearchProposal.Content.Songs> results) {
+                                mSearchResultsAdapter.swapData(results);
+                            }
+
+                        });
                 Log.d(TAG, "onSearchAction()");
             }
         });

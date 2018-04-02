@@ -36,20 +36,20 @@ import cherry.ethereal.data.ColorWrapper;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 public class MusicDataHelper {
 
-    private static final String COLORS_FILE_NAME = "colors.json";
+    private static final String COLORS_FILE_NAME = "music.json";
 
-    private static List<ColorWrapper> sColorWrappers = new ArrayList<>();
+    private static List<SearchProposal.Content.Songs> sColorWrappers = new ArrayList<>();
 
     private static List<MusicSuggestion> sColorSuggestions =
             new ArrayList<>(Arrays.asList(
-                    new MusicSuggestion("最爱"),
+                    new MusicSuggestion("Hello"),
                     new MusicSuggestion("不想说话"),
                     new MusicSuggestion("男孩"),
                     new MusicSuggestion("purple")
             ));
 
     public interface OnFindColorsListener {
-        void onResults(List<ColorWrapper> results);
+        void onResults(List<SearchProposal.Content.Songs> results);
     }
 
     public interface OnFindSuggestionsListener {
@@ -84,11 +84,9 @@ public class MusicDataHelper {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
-                try {
-                    Thread.sleep(simulatedDelay);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    sColorSuggestions.add(new MusicSuggestion("最爱"));
+                sColorSuggestions.add(new MusicSuggestion("哈哈"));
+//                    Thread.sleep(simulatedDelay);
 
                 MusicDataHelper.resetSuggestionsHistory();
                 List<MusicSuggestion> suggestionList = new ArrayList<>();
@@ -140,12 +138,12 @@ public class MusicDataHelper {
             protected FilterResults performFiltering(CharSequence constraint) {
 
 
-                List<ColorWrapper> suggestionList = new ArrayList<>();
+                List<SearchProposal.Content.Songs> suggestionList = new ArrayList<>();
 
                 if (!(constraint == null || constraint.length() == 0)) {
 
-                    for (ColorWrapper color : sColorWrappers) {
-                        if (color.getName().toUpperCase()
+                    for (SearchProposal.Content.Songs color : sColorWrappers) {
+                        if (color.name.toUpperCase()
                                 .startsWith(constraint.toString().toUpperCase())) {
 
                             suggestionList.add(color);
@@ -165,7 +163,7 @@ public class MusicDataHelper {
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
                 if (listener != null) {
-                    listener.onResults((List<ColorWrapper>) results.values);
+                    listener.onResults((List<SearchProposal.Content.Songs>) results.values);
                 }
             }
         }.filter(query);
@@ -199,13 +197,12 @@ public class MusicDataHelper {
         return jsonString;
     }
 
-    private static List<ColorWrapper> deserializeColors(String jsonString) {
+    private static List<SearchProposal.Content.Songs> deserializeColors(String jsonString) {
 
-        Gson gson = new Gson();
-
-        Type collectionType = new TypeToken<List<ColorWrapper>>() {
-        }.getType();
-        return gson.fromJson(jsonString, collectionType);
+        SearchProposal searchMusicList = new Gson().fromJson(jsonString, SearchProposal.class);
+        SearchProposal.Content objResult = searchMusicList.result;
+        SearchProposal.Content.Songs So = objResult.songs.get(0);
+        return objResult.songs;
     }
 
 }
