@@ -3,4 +3,7 @@
     <dimen name="music_title">16sp</dimen>
     <dimen name="music_time_label">12sp</dimen>
     <dimen name="music_icon">32sp</dimen>
+    <dimen name="search_view_inset">5dp</dimen>
+    <dimen name="sliding_search_view_header_height">250dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
