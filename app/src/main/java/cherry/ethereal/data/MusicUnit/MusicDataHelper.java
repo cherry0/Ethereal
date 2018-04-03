@@ -17,6 +17,7 @@ package cherry.ethereal.data.MusicUnit;
  */
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Filter;
 
 import com.google.gson.Gson;
@@ -31,9 +32,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import cherry.ethereal.R;
 import cherry.ethereal.data.ColorSuggestion;
 import cherry.ethereal.data.ColorWrapper;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static cherry.ethereal.data.EncodeUrl.toURLEncoded;
+
 public class MusicDataHelper {
 
     private static final String COLORS_FILE_NAME = "music.json";
@@ -77,17 +85,37 @@ public class MusicDataHelper {
         }
     }
 
-    public static void findSuggestions(Context context, String query, final int limit, final long simulatedDelay,
+    public static void findSuggestions(final Context context, final String query, final int limit, final long simulatedDelay,
                                        final OnFindSuggestionsListener listener) {
         new Filter() {
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
-                    sColorSuggestions.add(new MusicSuggestion("最爱"));
-                sColorSuggestions.add(new MusicSuggestion("哈哈"));
+                String Url = context.getString(R.string.domain) + "/search/suggest?keywords=" + toURLEncoded(query);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(Url)
+                        .build();
+                Response response = null;
+                try {
+                    response = client.newCall(request).execute();
+                    String songString = response.body().string();
+                    Log.i("获取网络数据", songString);
+                    if (!songString.equals("")) {
+                        sColorWrappers = deserializeColors(songString);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+//                    sColorSuggestions.add(new MusicSuggestion("最爱"));
+//                sColorSuggestions.add(new MusicSuggestion("哈哈"));
 //                    Thread.sleep(simulatedDelay);
-
+                sColorSuggestions.clear();
+                List<SearchProposal.Content.Songs> songs = sColorWrappers;
+                for (SearchProposal.Content.Songs song : songs) {
+                    sColorSuggestions.add(new MusicSuggestion(song.name));
+                }
                 MusicDataHelper.resetSuggestionsHistory();
                 List<MusicSuggestion> suggestionList = new ArrayList<>();
                 if (!(constraint == null || constraint.length() == 0)) {
