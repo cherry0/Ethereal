@@ -6,22 +6,31 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.FutureTarget;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import cherry.ethereal.adapter.ViewAdapter;
 
@@ -36,7 +45,7 @@ import static cherry.ethereal.CustomRender.rsBlur;
  * Use the {@link MusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MusicFragment extends Fragment  {
+public class MusicFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -56,6 +65,7 @@ public class MusicFragment extends Fragment  {
     private TextView mplayOptionBtn;
     private android.app.FragmentManager fragmentManager;
     private MusicListFragment musicListFragment;
+
     public MusicFragment() {
         // Required empty public constructor
     }
@@ -119,7 +129,6 @@ public class MusicFragment extends Fragment  {
     }
 
 
-
 //    @Override
 //    public void showOrHideWindow() {
 //        Toast.makeText(getContext(),"111",Toast.LENGTH_SHORT).show();
@@ -162,13 +171,13 @@ public class MusicFragment extends Fragment  {
         viewAdapter = new ViewAdapter(mListener.getSupportFragmentManagerInfo(), fr_list);
         mviewPager.setAdapter(viewAdapter);
 
-        //设置背景图片
-        imageView = (ImageView) view.findViewById(R.id.coverBackground);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.love);
-        Bitmap newBitmap = rsBlur(getContext(), bitmap, 25, 1);
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(newBitmap);
-        imageView.setBackground(bitmapDrawable);
 
+        //设置背景图片
+//        imageView = (ImageView) view.findViewById(R.id.coverBackground);
+//
+////        Bitmap newBitmap = rsBlur(getContext(), bitmap, 25, 1);
+////        BitmapDrawable bitmapDrawable = new BitmapDrawable(newBitmap);
+////        imageView.setBackground(bitmapDrawable);
         mplayBtn = (TextView) view.findViewById(R.id.playBtn);
         mnextBtn = (TextView) view.findViewById(R.id.nextBtn);
         mpreviousBtn = (TextView) view.findViewById(R.id.previousBtn);
@@ -187,10 +196,8 @@ public class MusicFragment extends Fragment  {
         mpreviousBtn.setTypeface(iconfont);
         mlistBtn.setTypeface(iconfont);
         mplayOptionBtn.setTypeface(iconfont);
-
         fragmentManager = getChildFragmentManager();
         musicListFragment = ((MusicListFragment) fragmentManager.findFragmentById(R.id.music_list_fragment));
-
     }
 
     /**

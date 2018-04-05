@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.64"
-        app:srcCompat="@drawable/love" />
+        app:srcCompat="@drawable/default_cover" />
 
     <Button
         android:id="@+id/hiddenMusicWindowBtn"

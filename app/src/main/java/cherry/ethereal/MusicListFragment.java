@@ -10,9 +10,17 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
+
+import cherry.ethereal.adapter.MusicListAdapter;
+import cherry.ethereal.data.MusicList.MusicListBase;
+import cherry.ethereal.data.MusicList.OnlineMusicList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +40,7 @@ public class MusicListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button musicBackBtn;
+    private ListView mlistView;
 //    private OnFragmentInteractionListener mListener;
 
     public MusicListFragment() {
@@ -75,6 +84,21 @@ public class MusicListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         musicBackBtn=(Button)view.findViewById(R.id.music_back_btn);
+        mlistView=(ListView)view.findViewById(R.id.music_list_view);
+        final OnlineMusicList onlineMusicList=new OnlineMusicList(getActivity());
+        final MusicListAdapter musicListAdapter=new MusicListAdapter(onlineMusicList.getList().getMusics(),getContext());
+        mlistView.setAdapter(musicListAdapter);
+        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Toast.makeText(getContext(),"点击第"+String.valueOf(position)+"项",Toast.LENGTH_SHORT).show();
+                OnlineMusicList onlineMusicList1=new OnlineMusicList(getActivity());
+                MusicListBase musicListBase=onlineMusicList.getList();
+                musicListBase.getMusics().remove(position);
+                onlineMusicList.saveList(musicListBase);
+                musicListAdapter.notifyDataSetChanged();
+            }
+        });
         onBackClickEvent();
         super.onViewCreated(view, savedInstanceState);
     }

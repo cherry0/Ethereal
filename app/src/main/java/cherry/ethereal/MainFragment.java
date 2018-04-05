@@ -2,11 +2,8 @@ package cherry.ethereal;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.service.wallpaper.WallpaperService;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,29 +18,18 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.CardView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
-import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.List;
 
 import cherry.ethereal.adapter.SearchResultsListAdapter;
-import cherry.ethereal.data.ColorSuggestion;
-import cherry.ethereal.data.ColorWrapper;
-import cherry.ethereal.data.DataHelper;
 import cherry.ethereal.data.MusicUnit.MusicDataHelper;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 import cherry.ethereal.data.MusicUnit.SearchProposal;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 /**
@@ -144,7 +130,6 @@ public class MainFragment extends Fragment {
         setupFloatingSearch();
         setupResultsList();
 
-//        getSeachResource();
     }
 
     /**
@@ -177,7 +162,6 @@ public class MainFragment extends Fragment {
                     //it makes sense to do it when loading something in
                     //the background.
                     mSearchView.showProgress();
-
                     //simulates a query call to a data source
                     //with a new query.
                     MusicDataHelper.findSuggestions(getActivity(), newQuery, 5,
@@ -211,7 +195,7 @@ public class MainFragment extends Fragment {
 
                             @Override
                             public void onResults(List<SearchProposal.Content.Songs> results) {
-                                mSearchResultsAdapter.swapData(results);
+                                mSearchResultsAdapter.swapData(results, getActivity());
                             }
 
                         });
@@ -229,7 +213,7 @@ public class MainFragment extends Fragment {
 
                             @Override
                             public void onResults(List<SearchProposal.Content.Songs> results) {
-                                mSearchResultsAdapter.swapData(results);
+                                mSearchResultsAdapter.swapData(results, getActivity());
                             }
 
                         });
@@ -378,34 +362,4 @@ public class MainFragment extends Fragment {
         mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-
-    private void getSeachResource() {
-        String Url = getActivity().getString(R.string.domain) + "/search/suggest?keywords=最爱";
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(Url)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String body = response.body().string();
-                SearchObjectToJson(body);
-                Log.i("获取到内容：", body);
-            }
-        });
-    }
-
-    //音乐ID
-    private SearchProposal.Content SearchObjectToJson(String json) {
-        SearchProposal searchMusicList = new Gson().fromJson(json, SearchProposal.class);
-        SearchProposal.Content objResult = searchMusicList.result;
-        SearchProposal.Content.Songs So = objResult.songs.get(0);
-        return objResult;
-    }
 }

@@ -19,15 +19,20 @@ package cherry.ethereal.adapter;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arlib.floatingsearchview.util.Util;
+
 import cherry.ethereal.data.ColorWrapper;
 import cherry.ethereal.R;
+import cherry.ethereal.data.MusicList.LocalMusicList;
+import cherry.ethereal.data.MusicList.MusicListBase;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 import cherry.ethereal.data.MusicUnit.SearchProposal;
 
@@ -40,8 +45,9 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     private List<SearchProposal.Content.Songs> mDataSet = new ArrayList<>();
 
     private int mLastAnimatedItemPosition = -1;
+    private Activity activity;
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onClick(SearchProposal.Content.Songs colorWrapper);
     }
 
@@ -54,18 +60,19 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
         public ViewHolder(View view) {
             super(view);
-            mColorName = (TextView) view.findViewById(R.id.color_name);
-            mColorValue = (TextView) view.findViewById(R.id.color_value);
+            mColorName = (TextView) view.findViewById(R.id.music_name);
+            mColorValue = (TextView) view.findViewById(R.id.music_author);
             mTextContainer = view.findViewById(R.id.text_container);
         }
     }
 
-    public void swapData(List<SearchProposal.Content.Songs> mNewDataSet) {
+    public void swapData(List<SearchProposal.Content.Songs> mNewDataSet, Activity _activity) {
         mDataSet = mNewDataSet;
+        this.activity = _activity;
         notifyDataSetChanged();
     }
 
-    public void setItemsOnClickListener(OnItemClickListener onClickListener){
+    public void setItemsOnClickListener(OnItemClickListener onClickListener) {
         this.mItemsOnClickListener = onClickListener;
     }
 
@@ -77,22 +84,60 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
     @Override
-    public void onBindViewHolder(SearchResultsListAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final SearchResultsListAdapter.ViewHolder holder, final int position) {
+                SearchProposal.Content.Songs colorSuggestion = mDataSet.get(position);
+        holder.mColorName.setText(colorSuggestion.name);
+        holder.mColorValue.setText(colorSuggestion.getAuthors(colorSuggestion.artists));
+        this.setItemsOnClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(SearchProposal.Content.Songs colorWrapper) {
+                Boolean flag = true;//判断歌曲是否存在 true 当前待播放歌曲不存在歌曲列表中，false反之
+                MusicListBase musicListBase=null;
+                List<MusicListBase.Musics> musicsList =null;
 
-        SearchProposal.Content.Songs colorSuggestion = mDataSet.get(position);
-//        holder.mColorName.setText(colorSuggestion.id());
-//        holder.mColorValue.setText(colorSuggestion.name());
+                LocalMusicList list = new LocalMusicList(activity);
+                if(list.getList()!=null) {
+                    musicListBase = list.getList();
+                    musicsList = list.getList().getMusics();
+                }else{
+                    musicListBase = new MusicListBase();
+                    musicsList = new ArrayList<>();
+                }
 
-//        int color = Color.parseColor(colorSuggestion.getHex());
-//        holder.mColorName.setTextColor(color);
-//        holder.mColorValue.setTextColor(color);
+                for (MusicListBase.Musics music : musicsList) {
+                    if (music.getId().equals(colorWrapper.id)) {
+                        flag = false;
+                        break;
+                    }
+                }
 
-        if(mLastAnimatedItemPosition < position){
+                if (flag) {
+                    MusicListBase.Musics musics = musicListBase.new Musics();
+                    musics.setSong_author(colorWrapper.getAuthors(colorWrapper.artists));
+                    musics.setLrc_url("歌词地址");
+                    musics.setCover_url("封面地址");
+                    musics.setSong_paly_times(1);
+                    musics.setSong_type("");
+                    musics.setId(colorWrapper.id);
+                    musics.setSong_name(colorWrapper.name);
+                    musicsList.add(musics);
+                    musicListBase.setMusics(musicsList);
+                    if (list.saveList(musicListBase)) {
+                        Toast.makeText(activity, "保存成功", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(activity, "歌曲已存在歌曲列表中", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        if (mLastAnimatedItemPosition < position) {
             animateItem(holder.itemView);
             mLastAnimatedItemPosition = position;
         }
 
-        if(mItemsOnClickListener != null){
+        if (mItemsOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

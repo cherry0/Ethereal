@@ -3,18 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="60dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:id="@+id/text_container"
+        android:id="@+id/music_text_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-            android:id="@+id/music_name"
+            android:id="@+id/music_list_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -22,7 +23,7 @@
             tools:text="music name" />
 
         <TextView
-            android:id="@+id/music_author"
+            android:id="@+id/music_list_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="author" />

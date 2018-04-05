@@ -21,11 +21,9 @@ import android.util.Log;
 import android.widget.Filter;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,9 +31,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import cherry.ethereal.R;
-import cherry.ethereal.data.ColorSuggestion;
-import cherry.ethereal.data.ColorWrapper;
-import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -91,30 +86,29 @@ public class MusicDataHelper {
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-
-                String Url = context.getString(R.string.domain) + "/search/suggest?keywords=" + toURLEncoded(query);
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(Url)
-                        .build();
-                Response response = null;
-                try {
-                    response = client.newCall(request).execute();
-                    String songString = response.body().string();
-                    Log.i("获取网络数据", songString);
-                    if (!songString.equals("")) {
-                        sColorWrappers = deserializeColors(songString);
+                if (!query.isEmpty() && !query.trim().equals("")) {
+                    String Url = context.getString(R.string.domain) + "/search?keywords=" + toURLEncoded(query);
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(Url)
+                            .build();
+                    Response response = null;
+                    try {
+                        response = client.newCall(request).execute();
+                        String songString = response.body().string();
+                        Log.i("获取网络数据", songString);
+                        if (!songString.equals("")) {
+                            sColorWrappers = deserializeColors(songString);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                    sColorSuggestions.add(new MusicSuggestion("最爱"));
-//                sColorSuggestions.add(new MusicSuggestion("哈哈"));
-//                    Thread.sleep(simulatedDelay);
-                sColorSuggestions.clear();
-                List<SearchProposal.Content.Songs> songs = sColorWrappers;
-                for (SearchProposal.Content.Songs song : songs) {
-                    sColorSuggestions.add(new MusicSuggestion(song.name));
+
+                    sColorSuggestions.clear();
+                    List<SearchProposal.Content.Songs> songs = sColorWrappers;
+                    for (SearchProposal.Content.Songs song : songs) {
+                        sColorSuggestions.add(new MusicSuggestion(song.name));
+                    }
                 }
                 MusicDataHelper.resetSuggestionsHistory();
                 List<MusicSuggestion> suggestionList = new ArrayList<>();
