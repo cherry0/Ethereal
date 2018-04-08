@@ -2,6 +2,7 @@ package cherry.ethereal;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,15 +59,19 @@ public class MusicFragment extends Fragment {
     private ViewAdapter viewAdapter;
     private List<View> pageList;
     private OnFragmentInteractionListener mListener;
-    private ImageView imageView;
-    private TextView mplayBtn;
-    private TextView mpreviousBtn;
-    private TextView mnextBtn;
-    private TextView mlistBtn;
-    private TextView mplayOptionBtn;
+    public ImageView imageView;
+    public TextView mplayBtn;
+    public TextView mpreviousBtn;
+    public TextView mnextBtn;
+    public TextView mlistBtn;
+    public TextView startTime;
+    public TextView endTime;
+    public TextView mplayOptionBtn;
     private android.app.FragmentManager fragmentManager;
     private MusicListFragment musicListFragment;
-
+    private android.support.v4.app.Fragment coverFragment;
+    private android.support.v4.app.Fragment lrcFragment;
+    public SeekBar musicSeekBar;
     public MusicFragment() {
         // Required empty public constructor
     }
@@ -148,6 +154,9 @@ public class MusicFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         FragmentManager getSupportFragmentManagerInfo();
+        void playOrPause();
+        void next();
+        void previous();
     }
 
     /**
@@ -159,9 +168,10 @@ public class MusicFragment extends Fragment {
         mviewPager = (ViewPager) view.findViewById(R.id.music_view_page);
         pageList = new ArrayList<View>();
         //动态加载viewPage
-        android.support.v4.app.Fragment lrcFragment = new LrcFragment();
-        android.support.v4.app.Fragment coverFragment = new CoverFragment();
+        lrcFragment = new LrcFragment();
+        coverFragment = new CoverFragment();
 
+        musicSeekBar=(SeekBar)view.findViewById(R.id.musicSeekBar);
         List<android.support.v4.app.Fragment> fr_list = new ArrayList<android.support.v4.app.Fragment>();
         //组织数据源
         fr_list.add(coverFragment);
@@ -173,22 +183,29 @@ public class MusicFragment extends Fragment {
 
 
         //设置背景图片
-//        imageView = (ImageView) view.findViewById(R.id.coverBackground);
-//
-////        Bitmap newBitmap = rsBlur(getContext(), bitmap, 25, 1);
-////        BitmapDrawable bitmapDrawable = new BitmapDrawable(newBitmap);
-////        imageView.setBackground(bitmapDrawable);
+        imageView = (ImageView) view.findViewById(R.id.coverBackground);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+        Bitmap newBitmap = rsBlur(getContext(), bitmap, 25, 1);
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(newBitmap);
+        imageView.setBackground(bitmapDrawable);
+
         mplayBtn = (TextView) view.findViewById(R.id.playBtn);
         mnextBtn = (TextView) view.findViewById(R.id.nextBtn);
         mpreviousBtn = (TextView) view.findViewById(R.id.previousBtn);
         mlistBtn = (TextView) view.findViewById(R.id.listBtn);
         mplayOptionBtn = (TextView) view.findViewById(R.id.playOptionBtn);
+        startTime=(TextView)view.findViewById(R.id.timeStartText);
+        endTime=(TextView)view.findViewById(R.id.timeEndText);
+
+
 
         onPlayClickEvent();
         onNextClickEvent();
         onPauseClickEvent();
         onListClickEvent();
         onPlayOptionClickEvent();
+
+
 
         Typeface iconfont = Typeface.createFromAsset(getResources().getAssets(), "iconfont.ttf");
         mplayBtn.setTypeface(iconfont);
@@ -207,7 +224,7 @@ public class MusicFragment extends Fragment {
         mplayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击播放", Toast.LENGTH_SHORT).show();
+                mListener.playOrPause();
             }
         });
     }
@@ -219,7 +236,7 @@ public class MusicFragment extends Fragment {
         mpreviousBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击上一曲", Toast.LENGTH_SHORT).show();
+                mListener.previous();
             }
         });
     }
@@ -231,7 +248,7 @@ public class MusicFragment extends Fragment {
         mnextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击下一曲", Toast.LENGTH_SHORT).show();
+                mListener.next();
             }
         });
     }
@@ -244,7 +261,6 @@ public class MusicFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 musicListFragment.showOrHideWindow();
-                Toast.makeText(getContext(), "点击目录列表", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -256,8 +272,38 @@ public class MusicFragment extends Fragment {
         mplayOptionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "点击播放设置", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
+
+    //加载歌词和歌曲封面
+    public void loadLrcAndCover(Integer songID) {
+        CoverFragment coverFragmentClass = (CoverFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(0);
+        LrcFragment lrcFragmentClass = (LrcFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(1);
+        coverFragmentClass.changeCover(songID);
+        lrcFragmentClass.loadLrc(songID);
+    }
+
+    //设置歌曲标题和作者名称
+    public void setTitleAndAuthor(String Name, String Author) {
+        CoverFragment coverFragmentClass = (CoverFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(0);
+        coverFragmentClass.changeMusicInfo(Name, Author);
+    }
+    //设置歌词位置
+    public void setLrcUpdateToTime(Integer time)
+    {
+        LrcFragment lrcFragmentClass = (LrcFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(1);
+        lrcFragmentClass.updateTime(time);
+    }
+    //设置播放属性
+    public void setPlayAbt(int seekMax) {
+        musicSeekBar.setMax(seekMax);
+    }
+    //设置音乐播放时间
+    public void setPlaySize(String time)
+    {
+        endTime.setText(time);
+    }
+
 }

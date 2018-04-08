@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +42,29 @@ public class MusicListFragment extends Fragment {
     private String mParam2;
     private Button musicBackBtn;
     private ListView mlistView;
-//    private OnFragmentInteractionListener mListener;
+    private MusicListAdapter musicListAdapter;
+    private OnlineMusicList onlineMusicList;
+    private OnMusicListFragmentInteractionListener mListener;
 
     public MusicListFragment() {
         // Required empty public constructor
+    }
+
+    public interface OnMusicListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void readyPlay(Integer ID,Integer position);
+        void setTilteAndAuthor(String Name,String Author);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MusicListFragment.OnMusicListFragmentInteractionListener) {
+            mListener = (MusicListFragment.OnMusicListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     /**
@@ -83,20 +103,20 @@ public class MusicListFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        musicBackBtn=(Button)view.findViewById(R.id.music_back_btn);
-        mlistView=(ListView)view.findViewById(R.id.music_list_view);
-        final OnlineMusicList onlineMusicList=new OnlineMusicList(getActivity());
-        final MusicListAdapter musicListAdapter=new MusicListAdapter(onlineMusicList.getList().getMusics(),getContext());
+        musicBackBtn = (Button) view.findViewById(R.id.music_back_btn);
+        mlistView = (ListView) view.findViewById(R.id.music_list_view);
+        onlineMusicList = new OnlineMusicList(getActivity());
+        final MusicListBase musicListBase = onlineMusicList.getList();
+        musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
         mlistView.setAdapter(musicListAdapter);
         mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(getContext(),"点击第"+String.valueOf(position)+"项",Toast.LENGTH_SHORT).show();
-                OnlineMusicList onlineMusicList1=new OnlineMusicList(getActivity());
-                MusicListBase musicListBase=onlineMusicList.getList();
-                musicListBase.getMusics().remove(position);
-                onlineMusicList.saveList(musicListBase);
-                musicListAdapter.notifyDataSetChanged();
+                Log.i("点击位置",String.valueOf(position));
+                mListener.readyPlay(musicListBase.getMusics().get(position).getId(),position);
+                mListener.setTilteAndAuthor(musicListBase.getMusics().get(position).getSong_name(),musicListBase.getMusics().get(position).getSong_author());
+                showOrHideWindow();
+
             }
         });
         onBackClickEvent();
@@ -138,19 +158,24 @@ public class MusicListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public void showOrHideWindow() {
-        FragmentManager fragmentManager=getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if(this.isVisible()){
+        if (this.isVisible()) {
             fragmentTransaction.hide(this);
-        }else{
+        } else {
             fragmentTransaction.show(this);
+            musicListAdapter=null;
+
+            onlineMusicList = new OnlineMusicList(getActivity());
+            final MusicListBase musicListBase = onlineMusicList.getList();
+            musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
+            mlistView.setAdapter(musicListAdapter);
         }
         fragmentTransaction.commit();
     }
 
-    public void onBackClickEvent()
-    {
+    public void onBackClickEvent() {
         musicBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,4 +184,6 @@ public class MusicListFragment extends Fragment {
         });
 
     }
+
+
 }

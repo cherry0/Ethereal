@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6fffffff"
+    android:background="@drawable/music_list_backgroud"
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
@@ -21,6 +21,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="歌词列表"
+            android:textColor="@color/fontColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="歌词列表"
+            android:textColor="@color/fontColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,6 +45,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:text="删除所有"
+            android:textColor="@color/fontColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -60,6 +63,7 @@
             android:id="@+id/music_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:cacheColorHint="@color/transparent"
             />
     </LinearLayout>
 
