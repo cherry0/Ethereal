@@ -1,0 +1,316 @@
+{
+  "result": {
+    "albums": [
+      {
+        "id": 32593,
+        "name": "最爱",
+        "artist": {
+          "id": 10577,
+          "name": "周慧敏",
+          "picUrl": "http://p1.music.126.net/fTEEzWpzbLj_8OH8a58pXg==/183618441855812.jpg",
+          "alias": [
+            "Vivian Chow"
+          ],
+          "albumSize": 42,
+          "picId": 183618441855812,
+          "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+          "img1v1": 0,
+          "alia": [
+            "Vivian Chow"
+          ],
+          "trans": null
+        },
+        "publishTime": 746812800000,
+        "size": 11,
+        "copyrightId": 5003,
+        "status": 1,
+        "picId": 26388279081798
+      },
+      {
+        "id": 19057,
+        "name": "Ultimate ",
+        "artist": {
+          "id": 6457,
+          "name": "张国荣",
+          "picUrl": "http://p1.music.126.net/bBoXfTvCBryuuDB7yfcnxw==/39582418617681.jpg",
+          "alias": [
+            "Leslie Cheung"
+          ],
+          "albumSize": 87,
+          "picId": 39582418617681,
+          "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+          "img1v1": 0,
+          "alia": [
+            "Leslie Cheung"
+          ],
+          "trans": null
+        },
+        "publishTime": 691516800000,
+        "size": 30,
+        "copyrightId": 7003,
+        "status": 3,
+        "picId": 102254581395221
+      }
+    ],
+    "songs": [
+      {
+        "id": 329925,
+        "name": "最爱",
+        "artists": [
+          {
+            "id": 10577,
+            "name": "周慧敏",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          }
+        ],
+        "album": {
+          "id": 32593,
+          "name": "最爱",
+          "artist": {
+            "id": 0,
+            "name": "",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          },
+          "publishTime": 746812800000,
+          "size": 11,
+          "copyrightId": 5003,
+          "status": 1,
+          "picId": 26388279081798
+        },
+        "duration": 266005,
+        "copyrightId": 7003,
+        "status": 0,
+        "alias": [],
+        "rtype": 0,
+        "ftype": 0,
+        "mvid": 5564635,
+        "fee": 8,
+        "rUrl": null
+      },
+      {
+        "id": 108551,
+        "name": "最爱",
+        "artists": [
+          {
+            "id": 10564,
+            "name": "张艾嘉",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          }
+        ],
+        "album": {
+          "id": 10774,
+          "name": "李宗盛音乐爱情大辞典",
+          "artist": {
+            "id": 0,
+            "name": "",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          },
+          "publishTime": 945100800000,
+          "size": 14,
+          "copyrightId": 684010,
+          "status": 1,
+          "picId": 45079976739629
+        },
+        "duration": 289620,
+        "copyrightId": 684010,
+        "status": 0,
+        "alias": [
+          "电影《最爱》主题曲"
+        ],
+        "rtype": 0,
+        "ftype": 0,
+        "mvid": 0,
+        "fee": 8,
+        "rUrl": null
+      },
+      {
+        "id": 327246,
+        "name": "最爱",
+        "artists": [
+          {
+            "id": 10564,
+            "name": "张艾嘉",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          }
+        ],
+        "album": {
+          "id": 32382,
+          "name": "最爱张艾嘉",
+          "artist": {
+            "id": 0,
+            "name": "",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          },
+          "publishTime": 938707200000,
+          "size": 25,
+          "copyrightId": 684010,
+          "status": 1,
+          "picId": 29686813963582
+        },
+        "duration": 284003,
+        "copyrightId": 684010,
+        "status": 0,
+        "alias": [
+          "电影《最爱》主题曲"
+        ],
+        "rtype": 0,
+        "ftype": 0,
+        "mvid": 0,
+        "fee": 8,
+        "rUrl": null
+      },
+      {
+        "id": 599055,
+        "name": "最爱",
+        "artists": [
+          {
+            "id": 16749,
+            "name": "柏原芳恵",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          }
+        ],
+        "album": {
+          "id": 56728,
+          "name": "最爱",
+          "artist": {
+            "id": 0,
+            "name": "",
+            "picUrl": null,
+            "alias": [],
+            "albumSize": 0,
+            "picId": 0,
+            "img1v1Url": "http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg",
+            "img1v1": 0,
+            "trans": null
+          },
+          "publishTime": 463161600000,
+          "size": 10,
+          "copyrightId": 5003,
+          "status": 1,
+          "picId": 2362850488151059
+        },
+        "duration": 285074,
+        "copyrightId": 663018,
+        "status": 0,
+        "alias": [],
+        "rtype": 0,
+        "ftype": 0,
+        "mvid": 0,
+        "fee": 0,
+        "rUrl": null
+      }
+    ],
+    "playlists": [
+      {
+        "id": 994096872,
+        "name": "有些歌一听就是一辈子【最爱金曲榜】",
+        "coverImgUrl": "http://p1.music.126.net/vaTXkgHq0moffb22etfjAw==/109951163061119963.jpg",
+        "creator": null,
+        "subscribed": false,
+        "trackCount": 44,
+        "userId": 338835109,
+        "playCount": 8052149,
+        "bookCount": 104847,
+        "highQuality": false
+      },
+      {
+        "id": 2123315264,
+        "name": "【最爱金曲榜】一听就有力量的歌",
+        "coverImgUrl": "http://p1.music.126.net/gZmUfKlq_PnUDFxlV0IWxw==/109951163170548626.jpg",
+        "creator": null,
+        "subscribed": false,
+        "trackCount": 31,
+        "userId": 338835109,
+        "playCount": 1768147,
+        "bookCount": 18604,
+        "highQuality": false
+      },
+      {
+        "id": 387712223,
+        "name": "『百人歌单』日语｜一人一首最爱曲",
+        "coverImgUrl": "http://p1.music.126.net/cCFAIWehDgfG6q31-mSQWw==/1404076359913336.jpg",
+        "creator": null,
+        "subscribed": false,
+        "trackCount": 118,
+        "userId": 60786463,
+        "playCount": 1001873,
+        "bookCount": 32526,
+        "highQuality": false
+      }
+    ],
+    "mvs": [
+      {
+        "id": 5564635,
+        "cover": "http://p3.music.126.net/ZXv4A5e7MWyYVN8pAoe9HQ==/19161189137487350.jpg",
+        "name": "最爱",
+        "playCount": 207531,
+        "briefDesc": null,
+        "desc": null,
+        "artistName": "周慧敏",
+        "artistId": 10577,
+        "duration": 268000,
+        "mark": 0,
+        "subed": false,
+        "artists": [
+          {
+            "id": 10577,
+            "name": "周慧敏",
+            "alias": [
+              "Vivian Chow"
+            ],
+            "transNames": null
+          }
+        ]
+      }
+    ],
+    "order": [
+      "songs",
+      "albums",
+      "mvs",
+      "playlists"
+    ]
+  },
+  "code": 200
+}

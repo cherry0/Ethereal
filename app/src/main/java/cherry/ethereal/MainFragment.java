@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,7 @@ import cherry.ethereal.data.MusicUnit.SearchProposal;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
     private FloatingSearchView mSearchView;
     private String mLastQuery = "标题";
     private final String TAG = "哈哈";
@@ -48,7 +49,7 @@ public class MainFragment extends Fragment {
     private boolean mIsDarkSearchTheme = false;
     private RecyclerView mSearchResultsList;
     public SearchResultsListAdapter mSearchResultsAdapter;
-
+    private AppBarLayout mAppBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -125,11 +126,18 @@ public class MainFragment extends Fragment {
 
     public void init(View view) {
         mSearchView = (FloatingSearchView) view.findViewById(R.id.floating_search_view);
-        mSearchResultsList = (RecyclerView) view.findViewById(R.id.search_results_list);
+//        mSearchResultsList = (RecyclerView) view.findViewById(R.id.search_results_list);
+        mAppBar = (AppBarLayout) view.findViewById(R.id.appbar);
 
+        mAppBar.addOnOffsetChangedListener(this);
         setupFloatingSearch();
         setupResultsList();
 
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        mSearchView.setTranslationY(verticalOffset);
     }
 
     /**
@@ -329,7 +337,7 @@ public class MainFragment extends Fragment {
         mSearchView.setOnSuggestionsListHeightChanged(new FloatingSearchView.OnSuggestionsListHeightChanged() {
             @Override
             public void onSuggestionsListHeightChanged(float newHeight) {
-                mSearchResultsList.setTranslationY(newHeight);
+//                mSearchResultsList.setTranslationY(newHeight);
             }
         });
 
@@ -358,8 +366,8 @@ public class MainFragment extends Fragment {
 
     private void setupResultsList() {
         mSearchResultsAdapter = new SearchResultsListAdapter();
-        mSearchResultsList.setAdapter(mSearchResultsAdapter);
-        mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+//        mSearchResultsList.setAdapter(mSearchResultsAdapter);
+//        mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
 }

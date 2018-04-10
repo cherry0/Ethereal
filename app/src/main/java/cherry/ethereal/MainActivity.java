@@ -9,11 +9,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -27,6 +32,7 @@ import java.util.List;
 
 import cherry.ethereal.Service.Binder.ComputeBinder;
 import cherry.ethereal.Service.ComputeService;
+import cherry.ethereal.adapter.LeftMenuAdapter;
 import cherry.ethereal.data.Lrc.SongJson;
 import cherry.ethereal.data.MusicList.LocalMusicList;
 import cherry.ethereal.data.MusicList.MusicListBase;
@@ -46,25 +52,25 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     private FragmentManager fragmentManager;
     private MusicFragment musicFragment;
     private MainFragment mainFragment;
-    private Button mshowPlayerBtn;
-    private Button mstopService;
+    private DrawerLayout mDrawerLayout;
     private MediaPlayer mediaPlayer;
     private ComputeBinder binder = null;
     private int playIndex=0;//当前播放在歌曲列表中的位置
     private boolean flagBtn=true;
     private boolean isStop = false;
     private Thread thread;
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            binder = (ComputeBinder) iBinder;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-        }
-    };
+    private ListView left_menu_list;
+//    private ServiceConnection conn = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+//            binder = (ComputeBinder) iBinder;
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,38 +90,29 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.hide(musicFragment);
 //        fragmentTransaction.commit();
-        mshowPlayerBtn = (Button) findViewById(R.id.showPlayerBtn);
-        mstopService = (Button) findViewById(R.id.stopService);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //菜单栏设置
+        left_menu_list=(ListView)findViewById(R.id.left_menu_list);
+        left_menu_list.setAdapter(new LeftMenuAdapter(this));
+        left_menu_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                switch (position){
+                    case 4:
+                        MainActivity.this.ShowOrHidePlayerWindow();
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        break;
+                }
+            }
+        });
         //启动音乐服务
         Intent intent = new Intent(this, ComputeService.class);
         intent.setAction("ethereal.music.service");
-        bindService(intent, conn, BIND_AUTO_CREATE);
+//        bindService(intent, conn, BIND_AUTO_CREATE);
     }
 
-    public void stopService(View view) {
-        Intent intent = new Intent(this, ComputeService.class);
-        intent.setAction("ethereal.music.service");
-        stopService(intent);
-//        Log.i("服务","停止");
-        String newstr = binder.count("小红");
-        Toast.makeText(MainActivity.this, newstr, Toast.LENGTH_SHORT).show();
 
-    }
-
-    /**
-     * 显示播放器按钮点击事件
-     *
-     * @param view
-     */
-    public void ShowPlayer(View view) {
-        ShowOrHidePlayerWindow();
-//
-//        LocalMusicList list = new LocalMusicList(this);
-//        MusicListBase musicListBase = list.getList();
-//        if (musicListBase != null) {
-//            musicListBase.getMusics();
-//        }
-    }
 
     /**
      * 显示或者隐藏播放器
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
     @Override
     protected void onDestroy() {
-        unbindService(conn);
+//        unbindService(conn);
         super.onDestroy();
     }
 

@@ -22,11 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="cherry.ethereal.Service.ComputeService">
-            <intent-filter>
-                <action android:name="ethereal.music.service"/>
-            </intent-filter>
-        </service>
+        <!--<service android:name="cherry.ethereal.Service.ComputeService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="ethereal.music.service"/>-->
+            <!--</intent-filter>-->
+        <!--</service>-->
     </application>
 
 </manifest>
