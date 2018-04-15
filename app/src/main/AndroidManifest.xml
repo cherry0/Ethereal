@@ -35,7 +35,8 @@
         <!-- </intent-filter> -->
         <!-- </service> -->
 
-        <activity android:name=".SongTypeActivity"></activity>
+        <activity android:name=".SongTypeActivity" />
+        <activity android:name=".MusicTypeActivity"></activity>
     </application>
 
 </manifest>

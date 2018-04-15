@@ -107,18 +107,21 @@ public class MusicListFragment extends Fragment {
         mlistView = (ListView) view.findViewById(R.id.music_list_view);
         onlineMusicList = new OnlineMusicList(getActivity());
         final MusicListBase musicListBase = onlineMusicList.getList();
-        musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
-        mlistView.setAdapter(musicListAdapter);
-        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.i("点击位置",String.valueOf(position));
-                mListener.readyPlay(musicListBase.getMusics().get(position).getId(),position);
-                mListener.setTilteAndAuthor(musicListBase.getMusics().get(position).getSong_name(),musicListBase.getMusics().get(position).getSong_author());
-                showOrHideWindow();
+        if(musicListBase!=null) {
 
-            }
-        });
+            musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
+            mlistView.setAdapter(musicListAdapter);
+            mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Log.i("点击位置", String.valueOf(position));
+                    mListener.readyPlay(musicListBase.getMusics().get(position).getId(), position);
+                    mListener.setTilteAndAuthor(musicListBase.getMusics().get(position).getSong_name(), musicListBase.getMusics().get(position).getSong_author());
+                    showOrHideWindow();
+
+                }
+            });
+        }
         onBackClickEvent();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -169,8 +172,10 @@ public class MusicListFragment extends Fragment {
 
             onlineMusicList = new OnlineMusicList(getActivity());
             final MusicListBase musicListBase = onlineMusicList.getList();
-            musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
-            mlistView.setAdapter(musicListAdapter);
+            if(musicListBase!=null) {
+                musicListAdapter = new MusicListAdapter(musicListBase.getMusics(), getContext());
+                mlistView.setAdapter(musicListAdapter);
+            }
         }
         fragmentTransaction.commit();
     }

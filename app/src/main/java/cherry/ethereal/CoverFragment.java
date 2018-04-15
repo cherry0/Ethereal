@@ -102,6 +102,7 @@ public class CoverFragment extends android.support.v4.app.Fragment {
 
     public void init(View view) {
         coverImageView = (ImageView) view.findViewById(R.id.coverImgView);
+        Glide.with(CoverFragment.this).load(R.drawable.default_cover).into(coverImageView);
         songNameTextView = (TextView) view.findViewById(R.id.titleText);
         songAuthorTextView = (TextView) view.findViewById(R.id.authorText);
     }

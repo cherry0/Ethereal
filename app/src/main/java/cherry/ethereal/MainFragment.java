@@ -1,6 +1,8 @@
 package cherry.ethereal;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -25,9 +27,13 @@ import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.arlib.floatingsearchview.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cherry.ethereal.adapter.SearchResultsListAdapter;
+import cherry.ethereal.data.MusicList.LocalMusicList;
+import cherry.ethereal.data.MusicList.MusicListBase;
+import cherry.ethereal.data.MusicList.OnlineMusicList;
 import cherry.ethereal.data.MusicUnit.MusicDataHelper;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 import cherry.ethereal.data.MusicUnit.SearchProposal;
@@ -50,7 +56,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
     private RecyclerView mSearchResultsList;
     public SearchResultsListAdapter mSearchResultsAdapter;
     private AppBarLayout mAppBar;
-
+    private ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -132,13 +138,60 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
         mAppBar.addOnOffsetChangedListener(this);
         setupFloatingSearch();
         setupResultsList();
+        imageView1 = (ImageView) view.findViewById(R.id.imageView1);
+        imageView2 = (ImageView) view.findViewById(R.id.imageView2);
+        imageView3 = (ImageView) view.findViewById(R.id.imageView3);
+        imageView4 = (ImageView) view.findViewById(R.id.imageView4);
+        imageView5 = (ImageView) view.findViewById(R.id.imageView5);
+        imageView6 = (ImageView) view.findViewById(R.id.imageView6);
 
+        imageView1.setOnClickListener(MyListener);
+        imageView2.setOnClickListener(MyListener);
+        imageView3.setOnClickListener(MyListener);
+        imageView4.setOnClickListener(MyListener);
+        imageView5.setOnClickListener(MyListener);
+        imageView6.setOnClickListener(MyListener);
     }
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         mSearchView.setTranslationY(verticalOffset);
     }
+    private View.OnClickListener MyListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent();
+            intent.setClass(getContext(), MusicTypeActivity.class);
+            switch (view.getId()) {
+                case R.id.imageView1:
+                    intent.putExtra("data",1);
+                    intent.putExtra("title","iTunes");
+                    break;
+                case R.id.imageView2:
+                    intent.putExtra("data",2);
+                    intent.putExtra("title","热歌榜");
+                    break;
+                case R.id.imageView3:
+                    intent.putExtra("data",3);
+                    intent.putExtra("title","原创榜");
+                    break;
+                case R.id.imageView4:
+                    intent.putExtra("data",4);
+                    intent.putExtra("title","ACG榜");
+                    break;
+                case R.id.imageView5:
+                    intent.putExtra("data",5);
+                    intent.putExtra("title","UK排行榜");
+                    break;
+                case R.id.imageView6:
+                    intent.putExtra("data",6);
+                    intent.putExtra("title","KTV榜");
+                    break;
+            }
+            startActivityForResult(intent, Activity.RESULT_FIRST_USER);
+        }
+
+    };
 
     /**
      * This interface must be implemented by activities that contain this
@@ -207,7 +260,48 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
                             }
 
                         });
-                Log.d(TAG, "onSuggestionClicked()");
+                if (colorSuggestion.getBody().contains("-")) {
+                    String[] info = colorSuggestion.getBody().split("-");
+                    Boolean flag = true;//判断歌曲是否存在 true 当前待播放歌曲不存在歌曲列表中，false反之
+                    MusicListBase musicListBase = null;
+                    List<MusicListBase.Musics> musicsList = null;
+
+                    OnlineMusicList list = new OnlineMusicList(getActivity());
+                    if (list.getList() != null) {
+                        musicListBase = list.getList();
+                        musicsList = list.getList().getMusics();
+                    } else {
+                        musicListBase = new MusicListBase();
+                        musicsList = new ArrayList<>();
+                    }
+
+                    for (MusicListBase.Musics music : musicsList) {
+
+                        if (music.getId().equals(info[2])) {
+                            flag = false;
+                            break;
+                        }
+                    }
+
+                    if (flag) {
+                        MusicListBase.Musics musics = musicListBase.new Musics();
+                        musics.setSong_author(info[1]);
+                        musics.setLrc_url("歌词地址");
+                        musics.setCover_url("封面地址");
+                        musics.setSong_paly_times(1);
+                        musics.setSong_type("");
+                        musics.setId(Integer.valueOf(info[2]));
+                        musics.setSong_name(info[0]);
+                        musicsList.add(musics);
+                        musicListBase.setMusics(musicsList);
+                        if (list.saveList(musicListBase)) {
+                            Toast.makeText(getActivity(), "保存成功", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "歌曲已存在歌曲列表中", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //Log.d(TAG, "onSuggestionClicked()");
 
                 mLastQuery = searchSuggestion.getBody();
             }
@@ -324,10 +418,12 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
                 }
 
                 textView.setTextColor(Color.parseColor(textColor));
+
                 String text = colorSuggestion.getBody()
                         .replaceFirst(mSearchView.getQuery(),
                                 "<font color=\"" + textLight + "\">" + mSearchView.getQuery() + "</font>");
                 textView.setText(Html.fromHtml(text));
+//                Log.i(mSearchView.getQuery(),colorSuggestion.getBody());
             }
 
         });

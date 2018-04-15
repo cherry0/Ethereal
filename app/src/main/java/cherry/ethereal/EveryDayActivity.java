@@ -1,6 +1,7 @@
 package cherry.ethereal;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class EveryDayActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_every_day);
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-
+        Intent intent=getIntent();
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
         button = (Button) findViewById(R.id.btnReload);
         mWebView = (WebView) findViewById(R.id.webView);
@@ -48,11 +49,11 @@ public class EveryDayActivity extends SwipeBackActivity {
         // 通过addJavascriptInterface()将Java对象映射到JS对象
         //参数1：Javascript对象名
         //参数2：Java对象名
-        mWebView.addJavascriptInterface(new AndroidtoJs(), "music");//AndroidtoJS类对象映射到js的test对象
+        mWebView.addJavascriptInterface(new AndroidtoJs(intent,this), "music");//AndroidtoJS类对象映射到js的test对象
 
         // 加载JS代码
         // 格式规定为:file:///android_asset/文件名.html
-        mWebView.loadUrl("http://192.168.1.102/");
+        mWebView.loadUrl("http://192.168.1.103/");
 
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override

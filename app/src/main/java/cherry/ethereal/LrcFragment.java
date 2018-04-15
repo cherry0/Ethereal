@@ -232,13 +232,15 @@ public class LrcFragment extends android.support.v4.app.Fragment {
                 String json = response.body().string();
                 Log.i("歌词JSON:",json);
                 final LrcJson.LrcText base = LrcToJson(json);
-                Log.i("歌词对象:",base.lyric);
-                lrcView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        lrcView.loadLrc(base.lyric);
-                    }
-                });
+                if(base!=null) {
+                    Log.i("歌词对象:", base.lyric);
+                    lrcView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            lrcView.loadLrc(base.lyric);
+                        }
+                    });
+                }
             }
         });
     }

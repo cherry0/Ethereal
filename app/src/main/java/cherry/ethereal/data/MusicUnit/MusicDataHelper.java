@@ -107,7 +107,7 @@ public class MusicDataHelper {
                     sColorSuggestions.clear();
                     List<SearchProposal.Content.Songs> songs = sColorWrappers;
                     for (SearchProposal.Content.Songs song : songs) {
-                        sColorSuggestions.add(new MusicSuggestion(song.name));
+                        sColorSuggestions.add(new MusicSuggestion(song.name+"-"+song.getAuthors(song.artists)+"-"+song.id.toString()));
                     }
                 }
                 MusicDataHelper.resetSuggestionsHistory();

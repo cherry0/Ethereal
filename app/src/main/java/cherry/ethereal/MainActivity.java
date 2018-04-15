@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     private DrawerLayout mDrawerLayout;
     private MediaPlayer mediaPlayer;
     private ComputeBinder binder = null;
-    private int playIndex=0;//当前播放在歌曲列表中的位置
-    private boolean flagBtn=true;
+    private int playIndex = 0;//当前播放在歌曲列表中的位置
+    private boolean flagBtn = true;
     private boolean isStop = false;
     private Thread thread;
     private ListView left_menu_list;
@@ -93,21 +93,21 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //菜单栏设置
-        left_menu_list=(ListView)findViewById(R.id.left_menu_list);
+        left_menu_list = (ListView) findViewById(R.id.left_menu_list);
         left_menu_list.setAdapter(new LeftMenuAdapter(this));
         left_menu_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent=new Intent();
-                switch (position){
+                Intent intent = new Intent();
+                switch (position) {
                     case 0:
-                        intent.setClass(MainActivity.this,SongTypeActivity.class);
+                        intent.setClass(MainActivity.this, SongTypeActivity.class);
                         startActivity(intent);
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 1:
-                        intent.setClass(MainActivity.this,EveryDayActivity.class);
-                        startActivity(intent);
+                        intent.setClass(MainActivity.this, EveryDayActivity.class);
+                        startActivityForResult(intent, 0x0001);
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 4:
@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 //        intent.setAction("ethereal.music.service");
 //        bindService(intent, conn, BIND_AUTO_CREATE);
     }
-
 
 
     /**
@@ -145,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     }
 
 
-
     @Override
     public void onBackPresseds(SearchView mSearchView) {
 
@@ -165,11 +163,11 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     }
 
 
-    public void readyPlay(Integer ID,Integer position) {
+    public void readyPlay(Integer ID, Integer position) {
         //点击音乐列表 1、加载音乐；2、加载封面cover；3、获取歌曲歌词
         musicFragment.loadLrcAndCover(ID);
         GetMusicUrl(ID);
-        playIndex=position;
+        playIndex = position;
 
     }
 
@@ -201,14 +199,16 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     }
 
     //播放或者暂停
-    public void playOrPause(){
-        isStop=false;
+    public void playOrPause() {
+        isStop = false;
         if (flagBtn == true) {
             if (mediaPlayer == null) {
                 playIndex = 0;
-                OnlineMusicList onlineMusicList=new OnlineMusicList(this);
-                readyPlay(onlineMusicList.getList().getMusics().get(playIndex).getId(),playIndex);
-                setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(),onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
+                OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+                if (onlineMusicList.getList() != null) {
+                    readyPlay(onlineMusicList.getList().getMusics().get(playIndex).getId(), playIndex);
+                    setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
+                }
 
             } else {
                 mediaPlayer.start();
@@ -225,41 +225,42 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     }
 
     //下一曲
-    public void next(){
-        isStop=false;
+    public void next() {
+        isStop = false;
         musicFragment.mplayBtn.setText(this.getString(R.string.icons_play));
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
         playIndex++;
-        OnlineMusicList onlineMusicList=new OnlineMusicList(this);
-        if(playIndex>=onlineMusicList.getList().getMusics().size()){
-            playIndex=0;
+        OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+        if (playIndex >= onlineMusicList.getList().getMusics().size()) {
+            playIndex = 0;
         }
         mediaPlayer = null;
         musicFragment.loadLrcAndCover(onlineMusicList.getList().getMusics().get(playIndex).getId());
         GetMusicUrl(onlineMusicList.getList().getMusics().get(playIndex).getId());
-        setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(),onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
+        setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
     }
 
     //上一曲
-    public void previous(){
+    public void previous() {
         musicFragment.mplayBtn.setText(this.getString(R.string.icons_play));
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
         playIndex--;
-        OnlineMusicList onlineMusicList=new OnlineMusicList(this);
-        if(playIndex<0){
-            playIndex=onlineMusicList.getList().getMusics().size()-1;
+        OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+        if (playIndex < 0) {
+            playIndex = onlineMusicList.getList().getMusics().size() - 1;
         }
         mediaPlayer = null;
         GetMusicUrl(onlineMusicList.getList().getMusics().get(playIndex).getId());
         musicFragment.loadLrcAndCover(onlineMusicList.getList().getMusics().get(playIndex).getId());
-        setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(),onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
+        setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
     }
+
     MediaPlayer.OnPreparedListener preparedListener = new MediaPlayer.OnPreparedListener() {
         @Override
         public void onPrepared(MediaPlayer mediaPlayer) {
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             musicFragment.setPlayAbt(mediaPlayer.getDuration());
             musicFragment.setLrcUpdateToTime(0);
             musicFragment.setPlaySize(String.valueOf(convert(mediaPlayer.getDuration())));
-            isStop=true;
+            isStop = true;
             musicFragment.setLrcUpdateToTime(0);
             try {
                 // 创建一个线程
@@ -370,16 +371,17 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             mediaPlayer.seekTo(seekBar.getProgress());
             isStop = true;
             musicFragment.setLrcUpdateToTime(seekBar.getProgress());
-            Log.i("设置",String.valueOf(isStop));
+            Log.i("设置", String.valueOf(isStop));
         }
     }
+
     // 自定义的线程
     class SeekBarThread implements Runnable {
 
         @Override
         public void run() {
             while (mediaPlayer != null) {
-                if(isStop==true) {
+                if (isStop == true) {
                     musicFragment.setLrcUpdateToTime(mediaPlayer.getCurrentPosition());
                     musicFragment.musicSeekBar.setProgress(mediaPlayer.getCurrentPosition());
                 }
@@ -394,9 +396,22 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
         }
 
     }
+
     //滚动歌词列表播放
-    public void timeToPlay(long time){
+    public void timeToPlay(long time) {
         mediaPlayer.seekTo((int) time);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Integer songID = Integer.valueOf(intent.getStringExtra("songID"));
+        Log.i("我是回传音乐ID", String.valueOf(songID));
+        readyPlay(songID, 0);
+        if (!musicFragment.isVisible()) {
+            this.ShowOrHidePlayerWindow();
+        }
+
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 }
 
