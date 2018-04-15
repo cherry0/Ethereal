@@ -9,11 +9,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:isolatedProcess="true"
         android:label="@string/app_name"
+        android:process=":music"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:isolatedProcess="true"
-        android:process=":music"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -22,11 +22,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<service android:name="cherry.ethereal.Service.ComputeService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="ethereal.music.service"/>-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <activity
+            android:name=".EveryDayActivity"
+            android:theme="@style/ImageTranslucentTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.EVERYDAY" />
+            </intent-filter>
+        </activity>
+        <!-- <service android:name="cherry.ethereal.Service.ComputeService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="ethereal.music.service"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
+
+        <activity android:name=".SongTypeActivity"></activity>
     </application>
 
 </manifest>

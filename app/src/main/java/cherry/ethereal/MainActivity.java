@@ -98,7 +98,18 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
         left_menu_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent=new Intent();
                 switch (position){
+                    case 0:
+                        intent.setClass(MainActivity.this,SongTypeActivity.class);
+                        startActivity(intent);
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        break;
+                    case 1:
+                        intent.setClass(MainActivity.this,EveryDayActivity.class);
+                        startActivity(intent);
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        break;
                     case 4:
                         MainActivity.this.ShowOrHidePlayerWindow();
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -107,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             }
         });
         //启动音乐服务
-        Intent intent = new Intent(this, ComputeService.class);
-        intent.setAction("ethereal.music.service");
+//        Intent intent = new Intent(this, ComputeService.class);
+//        intent.setAction("ethereal.music.service");
 //        bindService(intent, conn, BIND_AUTO_CREATE);
     }
 

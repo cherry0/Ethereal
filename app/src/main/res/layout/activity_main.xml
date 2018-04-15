@@ -9,19 +9,16 @@
     <include layout="@layout/content_main" />
 
     <LinearLayout
-        android:layout_width="240dp"
+        android:layout_width="260dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ffffff"
+        android:background="#1e2e3b"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/ic_launcher_background" />
 
         <LinearLayout
@@ -29,9 +26,10 @@
             android:layout_height="match_parent">
 
             <ListView
-            android:id="@+id/left_menu_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                android:id="@+id/left_menu_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null" />
 
         </LinearLayout>
     </LinearLayout>
