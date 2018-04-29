@@ -184,7 +184,9 @@ public class MusicListFragment extends Fragment {
         musicBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showOrHideWindow();
+//                showOrHideWindow();
+                FragmentManager fragmentManager=getFragmentManager();
+                fragmentManager.beginTransaction().remove(MusicListFragment.this).addToBackStack(null).commit();
             }
         });
 

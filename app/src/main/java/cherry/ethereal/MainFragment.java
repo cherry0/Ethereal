@@ -206,6 +206,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onBackPresseds(SearchView mSearchView);
+        void onActivityResultCall(Intent intent);
     }
 
     private void setupFloatingSearch() {
@@ -464,6 +465,14 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
         mSearchResultsAdapter = new SearchResultsListAdapter();
 //        mSearchResultsList.setAdapter(mSearchResultsAdapter);
 //        mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.i("子提示","YES");
+        mListener.onActivityResultCall(intent);
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
 }

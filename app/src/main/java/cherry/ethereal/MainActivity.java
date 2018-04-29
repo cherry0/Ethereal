@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     private boolean isStop = false;
     private Thread thread;
     private ListView left_menu_list;
+    private Boolean isOnlineMusic = false;
+
 //    private ServiceConnection conn = new ServiceConnection() {
 //        @Override
 //        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -84,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
      */
     private void init() {
         fragmentManager = getFragmentManager();
-        musicFragment = ((MusicFragment) fragmentManager.findFragmentById(R.id.musicFragment));
+//        musicFragment = ((MusicFragment) fragmentManager.findFragmentById(R.id.musicFragment));
         mainFragment = (MainFragment) fragmentManager.findFragmentById(R.id.mainFragment);
-        musicFragment.musicSeekBar.setOnSeekBarChangeListener(new SeekBarOnChange());
+//        musicFragment.musicSeekBar.setOnSeekBarChangeListener(new SeekBarOnChange());
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.hide(musicFragment);
 //        fragmentTransaction.commit();
@@ -111,7 +113,15 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 4:
-                        MainActivity.this.ShowOrHidePlayerWindow();
+
+                        if (musicFragment == null) {
+                            musicFragment = MusicFragment.newInstance();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.musicFragment, musicFragment).commit();
+                            mDrawerLayout.closeDrawer(Gravity.LEFT);
+                        } else {
+                            MainActivity.this.ShowOrHidePlayerWindow();
+                        }
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                 }
@@ -123,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 //        bindService(intent, conn, BIND_AUTO_CREATE);
     }
 
+    public void setSeekBar(SeekBar seek) {
+        seek.setOnSeekBarChangeListener(new SeekBarOnChange());
+    }
 
     /**
      * 显示或者隐藏播放器
@@ -164,6 +177,12 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
 
     public void readyPlay(Integer ID, Integer position) {
+        if(musicFragment==null){
+            musicFragment = MusicFragment.newInstance();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.musicFragment, musicFragment).commit();
+            fragmentManager.executePendingTransactions();
+        }
         //点击音乐列表 1、加载音乐；2、加载封面cover；3、获取歌曲歌词
         musicFragment.loadLrcAndCover(ID);
         GetMusicUrl(ID);
@@ -207,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 OnlineMusicList onlineMusicList = new OnlineMusicList(this);
                 if (onlineMusicList.getList() != null) {
                     readyPlay(onlineMusicList.getList().getMusics().get(playIndex).getId(), playIndex);
+
                     setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
                 }
 
@@ -317,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     }
 
     //获取音乐播放地址
-    public String GetMusicUrl(Integer songID) {
+    public void GetMusicUrl(Integer songID) {
         String url = "";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -333,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             public void onResponse(Call call, Response response) throws IOException {
                 String json = response.body().string();
                 SongJson.MusicBase base = BaseObjectToJson(json);
+
                 final String playUrl = base.url;
                 Log.i("歌曲地址:", base.url);
                 MainActivity.this.runOnUiThread(new Runnable() {
@@ -344,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 });
             }
         });
-        return url;
     }
 
     //音乐基础信息
@@ -404,14 +424,20 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Integer songID = Integer.valueOf(intent.getStringExtra("songID"));
-        Log.i("我是回传音乐ID", String.valueOf(songID));
-        readyPlay(songID, 0);
-        if (!musicFragment.isVisible()) {
-            this.ShowOrHidePlayerWindow();
-        }
-
+        onActivityResultCall(intent);
         super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    public void onActivityResultCall(Intent intent) {
+        if (intent != null) {
+            Integer songID = Integer.valueOf(intent.getStringExtra("songID"));
+            Log.i("我是回传音乐ID", String.valueOf(songID));
+            readyPlay(songID, 0);
+            isOnlineMusic = true;
+            if (!musicFragment.isVisible()) {
+                this.ShowOrHidePlayerWindow();
+            }
+        }
     }
 }
 

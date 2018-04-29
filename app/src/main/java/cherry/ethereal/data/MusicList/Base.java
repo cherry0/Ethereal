@@ -47,43 +47,6 @@ public class Base {
         this.mActivity = _activity;
     }
 
-//    protected MusicListBase loadMusicList(Activity activity) {
-//        verifyStoragePermissions(activity);
-//        FileInputStream fis = null;
-//        MusicListBase musicInfoList = null;
-//        BufferedReader br = null;
-//        String content = null;
-//        try {
-//
-//            StringBuilder sb = new StringBuilder();
-//            String pathdir = Environment.getExternalStorageDirectory().toString() + "/Ethereal";
-//            File fileDir = new File(pathdir);
-//            if (!fileDir.exists()) {
-//                fileDir.mkdirs();
-//            }
-//            String path = Environment.getExternalStorageDirectory().toString() + "/Ethereal/OnlineMusicList.json";
-//            File file = new File(path);
-//            if (!file.exists()) {
-//                file.createNewFile();
-//            }
-//            fis = new FileInputStream(file);
-//            br = new BufferedReader(new InputStreamReader(fis));
-//            content = br.readLine();
-//            while (content != null) {
-//                sb.append(content);
-//                content = br.readLine();
-//            }
-//            Gson gson = new Gson();
-//            musicInfoList = gson.fromJson(String.valueOf(sb.toString()), new TypeToken<MusicListBase>() {
-//            }.getType());
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return musicInfoList;
-//    }
 
     protected MusicListBase loadMusicList(Activity activity) {
         BufferedReader br=null;
@@ -125,26 +88,6 @@ public class Base {
             writer.write(content);
             writer.flush();
             isSaveFlag = true;
-//            /* 判断sd的外部设置状态是否可以读写 */
-//            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//                String pathdir = Environment.getExternalStorageDirectory().toString() + "/Ethereal";
-//                File fileDir = new File(pathdir);
-//                if (!fileDir.exists()) {
-//                    fileDir.mkdirs();
-//                }
-//                String path = Environment.getExternalStorageDirectory().toString() + "/Ethereal/OnlineMusicList.json";
-//                File file = new File(path);
-//                if (!file.exists()) {
-//                    file.createNewFile();
-//                }
-//                // 先清空内容再写入
-//                fos = new FileOutputStream(file);
-//                writer = new BufferedWriter(new OutputStreamWriter(fos));
-//                writer.write(content);
-//                writer.flush();
-//                isSaveFlag = true;
-//            }
-
         } catch (Exception ex) {
             ex.printStackTrace();
             try {

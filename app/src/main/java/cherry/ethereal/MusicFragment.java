@@ -86,12 +86,8 @@ public class MusicFragment extends Fragment {
      * @return A new instance of fragment MusicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MusicFragment newInstance(String param1, String param2) {
+    public static MusicFragment newInstance( ) {
         MusicFragment fragment = new MusicFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -158,6 +154,7 @@ public class MusicFragment extends Fragment {
         void playOrPause();
         void next();
         void previous();
+        void setSeekBar(SeekBar seek);
     }
 
     /**
@@ -206,7 +203,7 @@ public class MusicFragment extends Fragment {
         onListClickEvent();
         onPlayOptionClickEvent();
 
-
+        mListener.setSeekBar(musicSeekBar);
 
         Typeface iconfont = Typeface.createFromAsset(getResources().getAssets(), "iconfont.ttf");
         mplayBtn.setTypeface(iconfont);
@@ -215,7 +212,6 @@ public class MusicFragment extends Fragment {
         mlistBtn.setTypeface(iconfont);
         mplayOptionBtn.setTypeface(iconfont);
         fragmentManager = getChildFragmentManager();
-        musicListFragment = ((MusicListFragment) fragmentManager.findFragmentById(R.id.music_list_fragment));
     }
 
     /**
@@ -261,7 +257,14 @@ public class MusicFragment extends Fragment {
         mlistBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicListFragment.showOrHideWindow();
+//                musicListFragment.showOrHideWindow();
+                musicListFragment = new MusicListFragment();
+                //开启FragmentTransaction事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                //通过事务向Activity的布局中添加MyFragment
+                fragmentTransaction.replace(R.id.music_list_fragment, musicListFragment);
+                //提交事务
+                fragmentTransaction.commit();
             }
         });
     }
@@ -306,5 +309,7 @@ public class MusicFragment extends Fragment {
     {
         endTime.setText(time);
     }
+
+
 
 }

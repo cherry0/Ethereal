@@ -53,7 +53,7 @@ public class EveryDayActivity extends SwipeBackActivity {
 
         // 加载JS代码
         // 格式规定为:file:///android_asset/文件名.html
-        mWebView.loadUrl("http://192.168.1.103/");
+        mWebView.loadUrl("http://article.pengbobo.com/index/detail");
 
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override

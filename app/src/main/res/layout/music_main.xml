@@ -154,9 +154,8 @@
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/music_list_fragment"
-        android:name="cherry.ethereal.MusicListFragment"
         android:layout_width="0dp"
         android:layout_height="360dp"
         android:layout_marginBottom="8dp"
