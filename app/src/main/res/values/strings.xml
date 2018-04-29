@@ -10,7 +10,7 @@
     <string name="icons_list_loop_play">&#xe609;</string>
     <string name="icons_random_play">&#xe622;</string>
     <string name="icons_voice">&#xe87b;</string>
-
+    <string name="icons_back">&#xe604;</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="action_example_with_sliding_list">Sliding list</string>
     <string name="action_example_sliding_search_bar">Sliding search view</string>

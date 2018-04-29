@@ -18,7 +18,7 @@ import cherry.ethereal.data.MusicList.MusicListBase;
 
 public class LeftMenuAdapter extends BaseAdapter {
     private Context context;
-    private String[] ListName={"新碟上架","每日推荐","热门歌手","本地音乐","显示","关于"};
+    private String[] ListName={"新碟上架","每日推荐","显示/隐藏"};
     public LeftMenuAdapter(Context _context) {
         this.context = _context;
     }

@@ -205,13 +205,18 @@ public class MusicFragment extends Fragment {
 
         mListener.setSeekBar(musicSeekBar);
 
+
         Typeface iconfont = Typeface.createFromAsset(getResources().getAssets(), "iconfont.ttf");
         mplayBtn.setTypeface(iconfont);
         mnextBtn.setTypeface(iconfont);
         mpreviousBtn.setTypeface(iconfont);
         mlistBtn.setTypeface(iconfont);
         mplayOptionBtn.setTypeface(iconfont);
+//        hiddenMusicWindowBtn.setTypeface(iconfont);
         fragmentManager = getChildFragmentManager();
+
+
+
     }
 
     /**

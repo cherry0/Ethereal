@@ -76,7 +76,7 @@ public class Base {
      * */
     protected Boolean saveMusicList(Activity activity, MusicListBase musicListBase) {
         Boolean isSaveFlag = false;
-        verifyStoragePermissions(activity);
+//        verifyStoragePermissions(activity);
         Gson gson = new Gson();
         String content = gson.toJson(musicListBase);
         FileOutputStream fos = null;

@@ -13,10 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -57,6 +59,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
     public SearchResultsListAdapter mSearchResultsAdapter;
     private AppBarLayout mAppBar;
     private ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6;
+    private Button newMusicBtn,everyDayBtn;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -144,6 +147,8 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
         imageView4 = (ImageView) view.findViewById(R.id.imageView4);
         imageView5 = (ImageView) view.findViewById(R.id.imageView5);
         imageView6 = (ImageView) view.findViewById(R.id.imageView6);
+        newMusicBtn=(Button)view.findViewById(R.id.newMusicPublicBtn);
+        everyDayBtn=(Button)view.findViewById(R.id.everyDayBtn);
 
         imageView1.setOnClickListener(MyListener);
         imageView2.setOnClickListener(MyListener);
@@ -151,6 +156,8 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
         imageView4.setOnClickListener(MyListener);
         imageView5.setOnClickListener(MyListener);
         imageView6.setOnClickListener(MyListener);
+        newMusicBtn.setOnClickListener(MyListener);
+        everyDayBtn.setOnClickListener(MyListener);
     }
 
     @Override
@@ -186,6 +193,14 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
                 case R.id.imageView6:
                     intent.putExtra("data",6);
                     intent.putExtra("title","KTV榜");
+                    break;
+                case R.id.newMusicPublicBtn:
+                    intent.putExtra("data",2);
+                    intent.putExtra("title","新碟上架");
+                    break;
+                case R.id.everyDayBtn:
+                    intent.setClass(getContext(), EveryDayActivity.class);
+                    startActivityForResult(intent, 0x0001);
                     break;
             }
             startActivityForResult(intent, Activity.RESULT_FIRST_USER);

@@ -55,8 +55,8 @@ public class MusicTypeAdapter extends BaseAdapter {
             view=convertView;
             viewHolder=(MusicTypeAdapter.ViewHolder)view.getTag();
         }
-        viewHolder.mMusicAuthor.setTextColor(context.getResources().getColor(R.color.colorCoverBackground));
-        viewHolder.mMusicname.setTextColor(context.getResources().getColor(R.color.backColor));
+        viewHolder.mMusicAuthor.setTextColor(context.getResources().getColor(R.color.fontColorSmart));
+        viewHolder.mMusicname.setTextColor(context.getResources().getColor(R.color.fontColor));
         viewHolder.mMusicname.setText(musicTypeList.get(position).name);
         viewHolder.mMusic_id.setText(String.valueOf(musicTypeList.get(position).id));
         viewHolder.mMusicAuthor.setText(musicTypeList.get(position).ar.get(0).name);

@@ -2,6 +2,7 @@ package cherry.ethereal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -48,7 +49,7 @@ public class CoverFragment extends android.support.v4.app.Fragment {
     private ImageView coverImageView;
     private TextView songNameTextView;
     private TextView songAuthorTextView;
-
+    private TextView hiddenMusicWindowBtn;
     public CoverFragment() {
         // Required empty public constructor
     }
@@ -105,6 +106,16 @@ public class CoverFragment extends android.support.v4.app.Fragment {
         Glide.with(CoverFragment.this).load(R.drawable.default_cover).into(coverImageView);
         songNameTextView = (TextView) view.findViewById(R.id.titleText);
         songAuthorTextView = (TextView) view.findViewById(R.id.authorText);
+        hiddenMusicWindowBtn=(TextView)view.findViewById(R.id.hiddenMusicWindowBtn);
+
+        Typeface iconfont_more = Typeface.createFromAsset(getResources().getAssets(), "iconfont_more.ttf");
+        hiddenMusicWindowBtn.setTypeface(iconfont_more);
+        hiddenMusicWindowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     int i = 0;

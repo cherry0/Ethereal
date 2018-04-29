@@ -24,6 +24,8 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.youth.banner.Banner;
+import com.youth.banner.Transformer;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import java.util.List;
 import cherry.ethereal.Service.Binder.ComputeBinder;
 import cherry.ethereal.Service.ComputeService;
 import cherry.ethereal.adapter.LeftMenuAdapter;
+import cherry.ethereal.data.GlideImageLoader;
 import cherry.ethereal.data.Lrc.SongJson;
 import cherry.ethereal.data.MusicList.LocalMusicList;
 import cherry.ethereal.data.MusicList.MusicListBase;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     private Thread thread;
     private ListView left_menu_list;
     private Boolean isOnlineMusic = false;
-
+    private Banner banner;
 //    private ServiceConnection conn = new ServiceConnection() {
 //        @Override
 //        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -103,8 +106,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 Intent intent = new Intent();
                 switch (position) {
                     case 0:
-                        intent.setClass(MainActivity.this, SongTypeActivity.class);
-                        startActivity(intent);
+                        intent.setClass(MainActivity.this, EveryDayActivity.class);
+                        intent.putExtra("data",2);
+                        intent.putExtra("title","新碟上架");
+                        startActivityForResult(intent,0x0001);
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 1:
@@ -112,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                         startActivityForResult(intent, 0x0001);
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
-                    case 4:
-
+                    case 2:
                         if (musicFragment == null) {
                             musicFragment = MusicFragment.newInstance();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -127,10 +131,39 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 }
             }
         });
+
+
+        banner = (Banner) findViewById(R.id.banner);
+        //设置图片加载器
+        banner.setImageLoader(new GlideImageLoader());
+        List<String> images = new ArrayList<>();
+        images.add("http://p1.music.126.net/sLR8-BRur-Wn7Iye12Bmcg==/109951163272896720.jpg");
+        images.add("http://p1.music.126.net/_bCCuvK9vMp-7razCBbE-w==/109951163273215796.jpg");
+        //设置图片集合
+        banner.setImages(images);
+        banner.setBannerAnimation(Transformer.CubeOut);
+        banner.setDelayTime(4000);
+        //banner设置方法全部调用完毕时最后调用
+        banner.start();
         //启动音乐服务
 //        Intent intent = new Intent(this, ComputeService.class);
 //        intent.setAction("ethereal.music.service");
 //        bindService(intent, conn, BIND_AUTO_CREATE);
+    }
+
+    //如果你需要考虑更好的体验，可以这么操作
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //开始轮播
+        banner.startAutoPlay();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //结束轮播
+        banner.stopAutoPlay();
     }
 
     public void setSeekBar(SeekBar seek) {
@@ -144,8 +177,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (musicFragment.isHidden()) {
             fragmentTransaction.show(musicFragment);
+            banner.stopAutoPlay();
         } else {
             fragmentTransaction.hide(musicFragment);
+            banner.startAutoPlay();
         }
         fragmentTransaction.commit();
     }
@@ -177,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
 
     public void readyPlay(Integer ID, Integer position) {
-        if(musicFragment==null){
+        if (musicFragment == null) {
             musicFragment = MusicFragment.newInstance();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.musicFragment, musicFragment).commit();
