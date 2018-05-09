@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cherry.ethereal.adapter.ViewAdapter;
+import cherry.ethereal.data.PlayModel;
 
 import static cherry.ethereal.CustomRender.rsBlur;
 
@@ -73,6 +74,8 @@ public class MusicFragment extends Fragment {
     private android.support.v4.app.Fragment coverFragment;
     private android.support.v4.app.Fragment lrcFragment;
     public SeekBar musicSeekBar;
+    public Integer playModelIndex = 1;
+
     public MusicFragment() {
         // Required empty public constructor
     }
@@ -81,12 +84,10 @@ public class MusicFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MusicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MusicFragment newInstance( ) {
+    public static MusicFragment newInstance() {
         MusicFragment fragment = new MusicFragment();
         return fragment;
     }
@@ -151,9 +152,13 @@ public class MusicFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         FragmentManager getSupportFragmentManagerInfo();
+
         void playOrPause();
+
         void next();
+
         void previous();
+
         void setSeekBar(SeekBar seek);
     }
 
@@ -169,7 +174,7 @@ public class MusicFragment extends Fragment {
         lrcFragment = new LrcFragment();
         coverFragment = new CoverFragment();
 
-        musicSeekBar=(SeekBar)view.findViewById(R.id.musicSeekBar);
+        musicSeekBar = (SeekBar) view.findViewById(R.id.musicSeekBar);
         List<android.support.v4.app.Fragment> fr_list = new ArrayList<android.support.v4.app.Fragment>();
         //组织数据源
         fr_list.add(coverFragment);
@@ -192,9 +197,8 @@ public class MusicFragment extends Fragment {
         mpreviousBtn = (TextView) view.findViewById(R.id.previousBtn);
         mlistBtn = (TextView) view.findViewById(R.id.listBtn);
         mplayOptionBtn = (TextView) view.findViewById(R.id.playOptionBtn);
-        startTime=(TextView)view.findViewById(R.id.timeStartText);
-        endTime=(TextView)view.findViewById(R.id.timeEndText);
-
+        startTime = (TextView) view.findViewById(R.id.timeStartText);
+        endTime = (TextView) view.findViewById(R.id.timeEndText);
 
 
         onPlayClickEvent();
@@ -214,7 +218,6 @@ public class MusicFragment extends Fragment {
         mplayOptionBtn.setTypeface(iconfont);
 //        hiddenMusicWindowBtn.setTypeface(iconfont);
         fragmentManager = getChildFragmentManager();
-
 
 
     }
@@ -267,7 +270,7 @@ public class MusicFragment extends Fragment {
                 //开启FragmentTransaction事务
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 //通过事务向Activity的布局中添加MyFragment
-                fragmentTransaction.replace(R.id.music_list_fragment, musicListFragment);
+                fragmentTransaction.add(R.id.music_list_fragment, musicListFragment);
                 //提交事务
                 fragmentTransaction.commit();
             }
@@ -281,6 +284,32 @@ public class MusicFragment extends Fragment {
         mplayOptionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                playModelIndex++;
+                if(playModelIndex>3){
+                    playModelIndex=1;
+                }
+                switch (playModelIndex) {
+                    case 1:
+                        mplayOptionBtn.setText(R.string.icons_list_loop_play);
+                        PlayModel.setPlayModelIndex(1);
+                        Toast.makeText(getContext(),"循环列表",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        mplayOptionBtn.setText(R.string.icons_once_loop_play);
+                        PlayModel.setPlayModelIndex(2);
+                        Toast.makeText(getContext(),"单曲循环",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3:
+                        mplayOptionBtn.setText(R.string.icons_random_play);
+                        PlayModel.setPlayModelIndex(3);
+                        Toast.makeText(getContext(),"随机播放",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        mplayOptionBtn.setText(R.string.icons_list_loop_play);
+                        PlayModel.setPlayModelIndex(1);
+                        Toast.makeText(getContext(),"循环列表",Toast.LENGTH_SHORT).show();
+                        break;
+                }
 
             }
         });
@@ -299,22 +328,22 @@ public class MusicFragment extends Fragment {
         CoverFragment coverFragmentClass = (CoverFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(0);
         coverFragmentClass.changeMusicInfo(Name, Author);
     }
+
     //设置歌词位置
-    public void setLrcUpdateToTime(Integer time)
-    {
+    public void setLrcUpdateToTime(Integer time) {
         LrcFragment lrcFragmentClass = (LrcFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(1);
         lrcFragmentClass.updateTime(time);
     }
+
     //设置播放属性
     public void setPlayAbt(int seekMax) {
         musicSeekBar.setMax(seekMax);
     }
+
     //设置音乐播放时间
-    public void setPlaySize(String time)
-    {
+    public void setPlaySize(String time) {
         endTime.setText(time);
     }
-
 
 
 }

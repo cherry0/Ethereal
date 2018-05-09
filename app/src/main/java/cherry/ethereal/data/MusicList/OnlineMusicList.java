@@ -22,8 +22,6 @@ public class OnlineMusicList extends Base implements MusicList {
 
     @Override
     public Boolean saveList(MusicListBase musicListBase) {
-        //数组倒叙
-        Collections.reverse(musicListBase.getMusics());
         return this.saveMusicList(this.mActivity, musicListBase);
     }
 

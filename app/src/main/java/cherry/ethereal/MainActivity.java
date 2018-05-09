@@ -1,5 +1,6 @@
 package cherry.ethereal;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cherry.ethereal.Service.Binder.ComputeBinder;
 import cherry.ethereal.Service.ComputeService;
@@ -40,6 +42,7 @@ import cherry.ethereal.data.Lrc.SongJson;
 import cherry.ethereal.data.MusicList.LocalMusicList;
 import cherry.ethereal.data.MusicList.MusicListBase;
 import cherry.ethereal.data.MusicList.OnlineMusicList;
+import cherry.ethereal.data.PlayModel;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -106,10 +109,11 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 Intent intent = new Intent();
                 switch (position) {
                     case 0:
-                        intent.setClass(MainActivity.this, EveryDayActivity.class);
-                        intent.putExtra("data",2);
-                        intent.putExtra("title","新碟上架");
-                        startActivityForResult(intent,0x0001);
+                        intent.setClass(MainActivity.this, MusicTypeActivity.class);
+                        intent.putExtra("data", 2);
+                        intent.putExtra("title", "新碟上架");
+                        startActivityForResult(intent, Activity.RESULT_FIRST_USER);
+
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         break;
                     case 1:
@@ -122,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                             musicFragment = MusicFragment.newInstance();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.add(R.id.musicFragment, musicFragment).commit();
-                            mDrawerLayout.closeDrawer(Gravity.LEFT);
                         } else {
                             MainActivity.this.ShowOrHidePlayerWindow();
                         }
@@ -254,9 +257,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
     //播放或者暂停
     public void playOrPause() {
-        isStop = false;
+
         if (flagBtn == true) {
             if (mediaPlayer == null) {
+                //当前无任何播放服务执行
                 playIndex = 0;
                 OnlineMusicList onlineMusicList = new OnlineMusicList(this);
                 if (onlineMusicList.getList() != null) {
@@ -267,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
             } else {
                 mediaPlayer.start();
+                musicFragment.mplayBtn.setText(R.string.icons_pause);
             }
             flagBtn = false;
         } else {
@@ -350,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
-            next();
+            playModelSelect(PlayModel.getPlayModelIndex());
         }
     };
 
@@ -474,6 +479,45 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             }
         }
     }
+
+    /**
+     * 播放模式
+     */
+    public void playModelSelect(Integer indexModel) {
+        switch (indexModel) {
+            case 1:
+                //列表循环
+                next();
+                break;
+            case 2:
+                //单曲循环
+                playIndex--;
+                next();
+                break;
+            case 3:
+                //随机播放
+                OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+                Integer index = onlineMusicList.getList().getMusics().size();
+                Log.i("index--------",String.valueOf(index));
+                Random random=new Random();
+                playIndex=random.nextInt(index);
+                Log.i("playIndex--------",String.valueOf(playIndex));
+                isStop = false;
+                musicFragment.mplayBtn.setText(this.getString(R.string.icons_play));
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+                mediaPlayer = null;
+                musicFragment.loadLrcAndCover(onlineMusicList.getList().getMusics().get(playIndex).getId());
+                GetMusicUrl(onlineMusicList.getList().getMusics().get(playIndex).getId());
+                setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
+
+                break;
+        }
+    }
+
+
 }
 
 

@@ -146,7 +146,7 @@
         android:layout_marginBottom="35dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="@string/icons_random_play"
+        android:text="@string/icons_list_loop_play"
         android:textColor="@color/fontColor"
         android:textSize="@dimen/music_icon"
         app:layout_constraintBottom_toBottomOf="parent"

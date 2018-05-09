@@ -33,6 +33,7 @@ import cherry.ethereal.data.ColorWrapper;
 import cherry.ethereal.R;
 import cherry.ethereal.data.MusicList.LocalMusicList;
 import cherry.ethereal.data.MusicList.MusicListBase;
+import cherry.ethereal.data.MusicList.OnlineMusicList;
 import cherry.ethereal.data.MusicUnit.MusicSuggestion;
 import cherry.ethereal.data.MusicUnit.SearchProposal;
 
@@ -95,7 +96,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
                 MusicListBase musicListBase=null;
                 List<MusicListBase.Musics> musicsList =null;
 
-                LocalMusicList list = new LocalMusicList(activity);
+                OnlineMusicList list = new OnlineMusicList(activity);
                 if(list.getList()!=null) {
                     musicListBase = list.getList();
                     musicsList = list.getList().getMusics();
