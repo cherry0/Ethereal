@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -49,7 +50,7 @@ import static cherry.ethereal.CustomRender.rsBlur;
  * Use the {@link MusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MusicFragment extends Fragment {
+public class MusicFragment extends Fragment implements View.OnTouchListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -110,6 +111,7 @@ public class MusicFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        view.setOnTouchListener(this);
         init(view);
         super.onViewCreated(view, savedInstanceState);
     }
@@ -130,6 +132,11 @@ public class MusicFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return false;
     }
 
 

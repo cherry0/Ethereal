@@ -63,8 +63,12 @@ public class MusicTypeActivity extends SwipeBackActivity {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                 TextView musicIDText = view.findViewById(R.id.music_id);
+                                TextView musicNameText = view.findViewById(R.id.music_list_name);
+                                TextView musicAuthorText = view.findViewById(R.id.music_list_author);
                                 Intent intent1 = new Intent();
                                 intent1.putExtra("songID", musicIDText.getText());
+                                intent1.putExtra("songName",musicNameText.getText());
+                                intent1.putExtra("songAuthor",musicAuthorText.getText());
                                 setResult(0x0004, intent1);
                                 finish();
                             }

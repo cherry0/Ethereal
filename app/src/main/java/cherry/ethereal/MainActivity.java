@@ -228,6 +228,21 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
     }
 
+    public void readyPlay(Integer ID) {
+        if (musicFragment == null) {
+            musicFragment = MusicFragment.newInstance();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.musicFragment, musicFragment).commit();
+            fragmentManager.executePendingTransactions();
+        }
+        //点击音乐列表 1、加载音乐；2、加载封面cover；3、获取歌曲歌词
+        musicFragment.loadLrcAndCover(ID);
+        GetMusicUrl(ID);
+        OnlineMusicList list = new OnlineMusicList(MainActivity.this);
+        playIndex = list.getList().getMusics().size();
+
+    }
+
     public void setTilteAndAuthor(String Name, String Author) {
         musicFragment.setTitleAndAuthor(Name, Author);
     }
@@ -293,7 +308,12 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
             mediaPlayer.release();
         }
         playIndex++;
+
         OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+        if (onlineMusicList.getList() == null) {
+            Toast.makeText(MainActivity.this, "请先添加歌曲", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (playIndex >= onlineMusicList.getList().getMusics().size()) {
             playIndex = 0;
         }
@@ -312,6 +332,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
         }
         playIndex--;
         OnlineMusicList onlineMusicList = new OnlineMusicList(this);
+        if (onlineMusicList.getList() == null) {
+            Toast.makeText(MainActivity.this, "请先添加歌曲", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (playIndex < 0) {
             playIndex = onlineMusicList.getList().getMusics().size() - 1;
         }
@@ -378,6 +402,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
 
     //获取音乐播放地址
     public void GetMusicUrl(Integer songID) {
+        if (songID.equals(null)) {
+            Toast.makeText(MainActivity.this, "请先添加歌曲", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String url = "";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -471,12 +499,54 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     public void onActivityResultCall(Intent intent) {
         if (intent != null) {
             Integer songID = Integer.valueOf(intent.getStringExtra("songID"));
-            Log.i("我是回传音乐ID", String.valueOf(songID));
-            readyPlay(songID, 0);
+            String songName = intent.getStringExtra("songName");
+            String songAuthor = intent.getStringExtra("songAuthor");
+            Boolean flag = true;//判断歌曲是否存在 true 当前待播放歌曲不存在歌曲列表中，false反之
+            MusicListBase musicListBase = null;
+            List<MusicListBase.Musics> musicsList = null;
+
+            OnlineMusicList list = new OnlineMusicList(MainActivity.this);
+            if (list.getList() != null) {
+                musicListBase = list.getList();
+                musicsList = list.getList().getMusics();
+            } else {
+                musicListBase = new MusicListBase();
+                musicsList = new ArrayList<>();
+            }
+
+            for (MusicListBase.Musics music : musicsList) {
+                if (music.getId().equals(songID)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                MusicListBase.Musics musics = musicListBase.new Musics();
+                musics.setSong_author(songAuthor);
+                musics.setLrc_url("歌词地址");
+                musics.setCover_url("封面地址");
+                musics.setSong_paly_times(1);
+                musics.setSong_type("");
+                musics.setId(songID);
+                musics.setSong_name(songName);
+                musicsList.add(musics);
+                musicListBase.setMusics(musicsList);
+                if (list.saveList(musicListBase)) {
+                    Log.i("保存歌曲","成功");
+//                    Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.i("保存歌曲","失败");
+//                Toast.makeText(MainActivity.this, "歌曲已存在歌曲列表中", Toast.LENGTH_SHORT).show();
+            }
+            setTilteAndAuthor(songName,songAuthor);
+            readyPlay(songID);
             isOnlineMusic = true;
             if (!musicFragment.isVisible()) {
                 this.ShowOrHidePlayerWindow();
             }
+
         }
     }
 
@@ -498,10 +568,10 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 //随机播放
                 OnlineMusicList onlineMusicList = new OnlineMusicList(this);
                 Integer index = onlineMusicList.getList().getMusics().size();
-                Log.i("index--------",String.valueOf(index));
-                Random random=new Random();
-                playIndex=random.nextInt(index);
-                Log.i("playIndex--------",String.valueOf(playIndex));
+                Log.i("index--------", String.valueOf(index));
+                Random random = new Random();
+                playIndex = random.nextInt(index);
+                Log.i("playIndex--------", String.valueOf(playIndex));
                 isStop = false;
                 musicFragment.mplayBtn.setText(this.getString(R.string.icons_play));
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) {
