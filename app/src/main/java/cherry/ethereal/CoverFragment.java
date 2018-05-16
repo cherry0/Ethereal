@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +52,27 @@ public class CoverFragment extends android.support.v4.app.Fragment {
     private TextView songNameTextView;
     private TextView songAuthorTextView;
     private TextView hiddenMusicWindowBtn;
+    private OnFragmentInteractionListener mListener;
     public CoverFragment() {
         // Required empty public constructor
+
+    }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        FragmentManager getSupportFragmentManagerInfo();
+
+       void hideCover();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     /**
@@ -113,7 +134,7 @@ public class CoverFragment extends android.support.v4.app.Fragment {
         hiddenMusicWindowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mListener.hideCover();
             }
         });
     }

@@ -53,6 +53,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements MusicFragment.OnFragmentInteractionListener,
         LrcFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener,
+        CoverFragment.OnFragmentInteractionListener,
         MusicListFragment.OnMusicListFragmentInteractionListener {
 
     private FragmentManager fragmentManager;
@@ -192,6 +193,11 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
     @Override
     public android.support.v4.app.FragmentManager getSupportFragmentManagerInfo() {
         return getSupportFragmentManager();
+    }
+
+    @Override
+    public void hideCover() {
+        MainActivity.this.ShowOrHidePlayerWindow();
     }
 
 
