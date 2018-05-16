@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -49,7 +50,7 @@ import cherry.ethereal.data.MusicUnit.SearchProposal;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
+public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener,View.OnTouchListener {
     private FloatingSearchView mSearchView;
     private String mLastQuery = "标题";
     private final String TAG = "哈哈";
@@ -110,7 +111,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
+        view.setOnTouchListener(this);
         init(view);
 
         super.onViewCreated(view, savedInstanceState);
@@ -208,6 +209,12 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     };
 
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return true;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -222,6 +229,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
         // TODO: Update argument type and name
         void onBackPresseds(SearchView mSearchView);
         void onActivityResultCall(Intent intent);
+        void readyPlay(Integer ID);
     }
 
     private void setupFloatingSearch() {
@@ -292,8 +300,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
                     }
 
                     for (MusicListBase.Musics music : musicsList) {
-
-                        if (music.getId().equals(info[2])) {
+                        if (music.getId().equals(Integer.valueOf(info[2]))) {
                             flag = false;
                             break;
                         }
@@ -316,6 +323,7 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
                     } else {
                         Toast.makeText(getActivity(), "歌曲已存在歌曲列表中", Toast.LENGTH_SHORT).show();
                     }
+                    mListener.readyPlay(Integer.valueOf(info[2]));
                 }
                 //Log.d(TAG, "onSuggestionClicked()");
 
