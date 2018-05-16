@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,7 +32,7 @@ import cherry.ethereal.data.MusicList.OnlineMusicList;
  * Use the {@link MusicListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MusicListFragment extends Fragment {
+public class MusicListFragment extends Fragment implements View.OnTouchListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,6 +49,11 @@ public class MusicListFragment extends Fragment {
 
     public MusicListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return true;
     }
 
     public interface OnMusicListFragmentInteractionListener {
@@ -98,6 +104,7 @@ public class MusicListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.music_list, null);
+        view.setOnTouchListener(this);
         return view;
     }
 
@@ -122,6 +129,7 @@ public class MusicListFragment extends Fragment {
                 }
             });
         }
+
         onBackClickEvent();
         super.onViewCreated(view, savedInstanceState);
     }

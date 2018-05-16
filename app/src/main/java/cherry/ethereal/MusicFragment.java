@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -106,12 +107,12 @@ public class MusicFragment extends Fragment implements View.OnTouchListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.music_main, null);
+        view.setOnTouchListener(this);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        view.setOnTouchListener(this);
         init(view);
         super.onViewCreated(view, savedInstanceState);
     }
@@ -136,7 +137,7 @@ public class MusicFragment extends Fragment implements View.OnTouchListener{
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        return false;
+        return true;
     }
 
 
@@ -333,6 +334,7 @@ public class MusicFragment extends Fragment implements View.OnTouchListener{
     //设置歌曲标题和作者名称
     public void setTitleAndAuthor(String Name, String Author) {
         CoverFragment coverFragmentClass = (CoverFragment) ((ViewAdapter) mviewPager.getAdapter()).getItem(0);
+
         coverFragmentClass.changeMusicInfo(Name, Author);
     }
 

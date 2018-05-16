@@ -546,12 +546,12 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 Log.i("保存歌曲","失败");
 //                Toast.makeText(MainActivity.this, "歌曲已存在歌曲列表中", Toast.LENGTH_SHORT).show();
             }
-            setTilteAndAuthor(songName,songAuthor);
             readyPlay(songID);
             isOnlineMusic = true;
             if (!musicFragment.isVisible()) {
                 this.ShowOrHidePlayerWindow();
             }
+            //setTilteAndAuthor(songName,songAuthor);
 
         }
     }
@@ -588,7 +588,6 @@ public class MainActivity extends AppCompatActivity implements MusicFragment.OnF
                 musicFragment.loadLrcAndCover(onlineMusicList.getList().getMusics().get(playIndex).getId());
                 GetMusicUrl(onlineMusicList.getList().getMusics().get(playIndex).getId());
                 setTilteAndAuthor(onlineMusicList.getList().getMusics().get(playIndex).getSong_name(), onlineMusicList.getList().getMusics().get(playIndex).getSong_author());
-
                 break;
         }
     }

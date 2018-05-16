@@ -16,7 +16,7 @@
         app:lrcAnimationDuration="1000"
         app:lrcCurrentTextColor="#3F51B5"
         app:lrcDividerHeight="24dp"
-        app:lrcLabel="歌词加载中..."
+        app:lrcLabel="当前暂无歌词"
         app:lrcNormalTextColor="#BDBDBD"
         app:lrcPadding="40dp"
         app:lrcTextSize="16sp"

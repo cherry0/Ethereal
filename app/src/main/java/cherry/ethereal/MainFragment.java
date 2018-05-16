@@ -494,7 +494,6 @@ public class MainFragment extends Fragment implements AppBarLayout.OnOffsetChang
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.i("子提示","YES");
         mListener.onActivityResultCall(intent);
         super.onActivityResult(requestCode, resultCode, intent);
     }
